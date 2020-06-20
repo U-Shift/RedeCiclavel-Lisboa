@@ -4,6 +4,9 @@ getwd()
 
 library(tidyverse)
 library(sf)
+library(cartography)
+library(mapview)
+
 library(readxl)
 library(reshape2)
 library(waffle)
@@ -21,60 +24,37 @@ library(purrr)
 #Importar ficheiros shapefile
 LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
 st_transform(LisboaLimite,  crs = 4326)
-Ciclovias_old <-st_read("D:/rosa/Dropbox/ATIVOS CML/BD oficiais Rede ciclavel/CicloviasLisboa.shp")
+Ciclovias <-st_read("data/CicloviasOld.shp")
 
-#definir estilo de mapa
-mapTheme <- function(base_size = 12) {
-  theme(
-    text = element_text( color = "black"),
-    plot.title = element_text(size = 18,colour = "black"),
-    plot.subtitle=element_text(face="italic"),
-    plot.caption=element_text(hjust=0),
-    axis.ticks = element_blank(),
-    panel.background = element_blank(),
-    #panel.grid.major = element_line("grey80", size = 0.1),
-    panel.grid.major = element_line(color = "transparent"),
-    strip.text = element_text(size=14,face = "bold"),
-    axis.title = element_blank(),
-    axis.text = element_blank(),
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    panel.grid.minor = element_blank(),
-    strip.background = element_rect(fill = "grey80", color = "white"),
-    plot.background = element_blank(),
-    legend.background = element_blank(),
-    legend.title = element_text(colour = "black", face = "italic"),
-    legend.text = element_text(colour = "black", face = "italic"))
-}
-#theme para facets, com Ano mais pequeno
-mapThemeFacets <- function(base_size = 12) {
-  theme(
-    text = element_text( color = "black"),
-    plot.title = element_text(size = 18,colour = "black"),
-    plot.subtitle=element_text(face="italic"),
-    plot.caption=element_text(hjust=0),
-    axis.ticks = element_blank(),
-    panel.background = element_blank(),
-    #panel.grid.major = element_line("grey80", size = 0.1),
-    panel.grid.major = element_line(color = "transparent"),
-    strip.text = element_text(size=10,face = "bold"),
-    axis.title = element_blank(),
-    axis.text = element_blank(),
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    panel.grid.minor = element_blank(),
-    strip.background = element_rect(fill = "grey80", color = "white"),
-    plot.background = element_blank(),
-    legend.background = element_blank(),
-    legend.title = element_text(colour = "black", face = "italic"),
-    legend.text = element_text(colour = "black", face = "italic"))
-}
+#actualizar para 2020 a partir do server da CML
+Ciclovias2020 = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson")
+#Ciclovias2020 <-st_read("data/Ciclovias2020.Rds")
 
 #meter tracejado o que não é segregado
 Ciclovias$Segregado <- "Sim"
 Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="30+Bici"] <- "Nao"
 Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="Bus+Bici"] <- "Nao"
 Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="Zona de Coexistencia"] <- "Nao"
+
+#ficar só com as segregadas e 30+bici
+Ciclovias2020$TIPOLOGIA = as.character(Ciclovias2020$TIPOLOGIA)
+table(Ciclovias2020$TIPOLOGIA)
+Ciclovias2020$TIPOLOGIA[Ciclovias2020$TIPOLOGIA=="Faixas Cicláveis ou Contrafluxos"] = "Ciclovia segregada"
+Ciclovias2020$TIPOLOGIA[Ciclovias2020$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia segregada"
+Ciclovias2020$TIPOLOGIA[Ciclovias2020$TIPOLOGIA=="Pistas Cicláveis Unidirecionais"] = "Ciclovia segregada"
+Ciclovias2020$TIPOLOGIA[Ciclovias2020$TIPOLOGIA=="Zona de Coexistência"] = "30+Bici"
+Ciclovias2020= Ciclovias2020[Ciclovias2020$TIPOLOGIA!="Trilho",]
+Ciclovias2020= Ciclovias2020[Ciclovias2020$TIPOLOGIA!="Percurso Ciclo-pedonal",]
+Ciclovias2020$TIPOLOGIA[Ciclovias2020$OBJECTID==2142] = "Ciclovia segregada" #parque urbano vale da montanha
+Ciclovias2020 = Ciclovias2020 %>% group_by(DESIGNACAO, TIPOLOGIA, ANO) %>% summarise(do_union=T)
+Ciclovias2020$lenght = st_length(Ciclovias2020)
+Ciclovias2020nome = Ciclovias2020
+Ciclovias2020 = Ciclovias2020[,c(2,4)]
+
+#mostrar num mapa interactivo
+mapview(Ciclovias2020, color = greens, lwd=1.5, popup=NULL, hide=T, legend=F)
+
+
 
 #adicionar ano acumulado
 Ciclovias$AnoT <- Ciclovias$Ano
