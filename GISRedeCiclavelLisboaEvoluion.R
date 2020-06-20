@@ -2,8 +2,8 @@
 getwd()
 #setwd("D:/GIS/Ciclovias_CML/RedeCiclavel-Lisboa")
 
-library(sf)
 library(tidyverse)
+library(sf)
 library(readxl)
 library(reshape2)
 library(waffle)
@@ -19,9 +19,9 @@ library(purrr)
 
 ### importar shapefiles Lisboa e Ciclovias###
 #Importar ficheiros shapefile
-LisboaLimite <-read_sf("D:/GIS/BCamposPereira/gpkg")
+LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
 st_transform(LisboaLimite,  crs = 4326)
-Ciclovias <-read_sf("D:/rosa/Dropbox/EixosActivos_CML/Dados_EixosCiclaveis/CMLX/CicloviasLisboa.shp")
+Ciclovias_old <-st_read("D:/rosa/Dropbox/ATIVOS CML/BD oficiais Rede ciclavel/CicloviasLisboa.shp")
 
 #definir estilo de mapa
 mapTheme <- function(base_size = 12) {
