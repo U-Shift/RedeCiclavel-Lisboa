@@ -1,11 +1,7 @@
 Rede Ciclável Liboa - Mapa animado
 ================
-*RFélix*
 
-RedeCiclavel-Lisboa
-===================
-
-Mapa animado com a evolução da rede ciclável em Lisboa desde 2001 \#\#\# A informação base está disponível no site de geodados da CML: <http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0>
+Mapa animado com a evolução da rede ciclável em Lisboa desde 2001 </br> A informação base está disponível no site de geodados da CML: <http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0>
 
 Este repositório contém duas funções:
 -------------------------------------
@@ -18,73 +14,27 @@ GIF interactivo
 
 ### Peparação dos dados
 
-Importar packages
+#### Importar packages
 
 ``` r
 library(tidyverse)
-```
-
-    ## -- Attaching packages --------------------------------------------- tidyverse 1.3.0 --
-
-    ## v ggplot2 3.3.0     v purrr   0.3.4
-    ## v tibble  2.1.3     v dplyr   0.8.5
-    ## v tidyr   1.0.2     v stringr 1.4.0
-    ## v readr   1.3.1     v forcats 0.4.0
-
-    ## Warning: package 'ggplot2' was built under R version 3.6.3
-
-    ## Warning: package 'purrr' was built under R version 3.6.3
-
-    ## Warning: package 'dplyr' was built under R version 3.6.3
-
-    ## -- Conflicts ------------------------------------------------ tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
 library(sf)
-```
-
-    ## Warning: package 'sf' was built under R version 3.6.3
-
-    ## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
-
-``` r
 library(mapview)
 ```
 
-    ## Warning: package 'mapview' was built under R version 3.6.3
-
-Importar shapefiles Lisboa
+#### Importar shapefiles Lisboa
 
 ``` r
 #Limites de Lisboa
 LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
+LisboaLimite = LisboaLimite[,c(3,5)] %>% st_transform(LisboaLimite,  crs = 4326)
 ```
 
-    ## Reading layer `Lisboa_limite2' from data source `D:\GIS\Ciclovias_CML\RedeCiclavel-Lisboa\data\Lisboa_limite.gpkg' using driver `GPKG'
-    ## Simple feature collection with 1 feature and 4 fields
-    ## geometry type:  MULTIPOLYGON
-    ## dimension:      XY
-    ## bbox:           xmin: -95412.91 ymin: -107892 xmax: -83126.32 ymax: -96313.35
-    ## projected CRS:  ETRS89 / Portugal TM06
+#### Importar rede ciclável
 
 ``` r
-st_transform(LisboaLimite,  crs = 4326)
-```
-
-    ## Simple feature collection with 1 feature and 4 fields
-    ## geometry type:  MULTIPOLYGON
-    ## dimension:      XY
-    ## bbox:           xmin: -9.229836 ymin: 38.69141 xmax: -9.089955 ymax: 38.79676
-    ## geographic CRS: WGS 84
-    ##   DICOFRE Freguesia Concelho Distrito                           geom
-    ## 1  110660   Estrela   LISBOA   LISBOA MULTIPOLYGON (((-9.187505 3...
-
-Importar rede ciclável
-
-``` r
-CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") #actualizar para 2020 a partir do server da CML
+#actualizar para 2020 a partir do server da CML
+CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
 ```
 
     ## Reading layer `Ciclovias' from data source `https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson' using driver `GeoJSON'
@@ -95,10 +45,14 @@ CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9
     ## geographic CRS: WGS 84
 
 ``` r
-#st_write(CicloviasATUAL, "data/Ciclovias072020.shp")
+#st_write(CicloviasATUAL[,c(4,7,19)], "data/Ciclovias072020.shp") #data deste mês
+```
 
-#alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial
-Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg") #voltar a importar
+Alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial.
+
+``` r
+#voltar a importar
+Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg")
 ```
 
     ## Reading layer `Ciclovias2020Julho' from data source `D:\GIS\Ciclovias_CML\RedeCiclavel-Lisboa\data\Ciclovias2020Julho.gpkg' using driver `GPKG'
@@ -108,26 +62,30 @@ Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg") #voltar a importar
     ## bbox:           xmin: -9.228815 ymin: 38.69188 xmax: -9.091449 ymax: 38.79549
     ## geographic CRS: WGS 84
 
-Acertar geometria
+##### Acertar geometria
 
 ``` r
-sum(Ciclovias$lenght, na.rm=T)
-```
-
-    ## [1] 146806.3
-
-``` r
-#(calma, há segmentos que foram destruídos entretanto)
-
 #recalcular geometria
 Ciclovias$lenght = st_length(Ciclovias) 
-sum(Ciclovias$lenght) #acaba por ter 119,9 km
+sum(Ciclovias$lenght)
 ```
 
     ## 119968.2 [m]
 
-<!-- #ver num mapa -->
-<!-- mapview(Ciclovias) #todas -->
+``` r
+# calma, há segmentos que foram destruídos entretanto
+```
+
+#### Ver num mapa
+
+Todas as ciclovias que existiram
+
+``` r
+mapview::mapview(Ciclovias)
+```
+
+![](README_files/figure-markdown_github/unnamed-chunk-6-1.png)
+
 <!-- ## Reclassificar ciclovias em segregadas (uni e bi-direccionais) e banalizadas (30+bici, zona de coexistência) -->
 <!-- #meter tracejado o que não é segregado -->
 <!-- Ciclovias$TIPOLOGIA = as.character(Ciclovias$TIPOLOGIA) -->

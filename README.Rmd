@@ -1,16 +1,16 @@
 ---
 title: "Rede Ciclável Liboa - Mapa animado"
-author: _RFélix_
 output: github_document
+always_allow_html: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## RedeCiclavel-Lisboa
+
 Mapa animado com a evolução da rede ciclável em Lisboa desde 2001
-  
+</br>
 A informação base está disponível no site de geodados da CML: 
 http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0
 
@@ -21,41 +21,47 @@ http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0
 
 # GIF interactivo
 ### Peparação dos dados
-Importar packages
+#### Importar packages
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(sf)
 library(mapview)
 ```
 
-Importar shapefiles Lisboa
-```{r include=FALSE}
+#### Importar shapefiles Lisboa
+```{r eval=F, message=FALSE, warning=FALSE}
 #Limites de Lisboa
 LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
-st_transform(LisboaLimite,  crs = 4326)
+LisboaLimite = LisboaLimite[,c(3,5)] %>% st_transform(LisboaLimite,  crs = 4326)
 ```
 
-Importar rede ciclável
+#### Importar rede ciclável
 ```{r}
-CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") #actualizar para 2020 a partir do server da CML
-#st_write(CicloviasATUAL, "data/Ciclovias072020.shp")
-
-#alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial
-Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg") #voltar a importar
+#actualizar para 2020 a partir do server da CML
+CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
+#st_write(CicloviasATUAL[,c(4,7,19)], "data/Ciclovias072020.shp") #data deste mês
+```
+Alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial. 
+```{r}
+#voltar a importar
+Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg")
 ```
 
-Acertar geometria
-```{r}
-sum(Ciclovias$lenght, na.rm=T)
-#(calma, há segmentos que foram destruídos entretanto)
 
+##### Acertar geometria
+```{r}
 #recalcular geometria
 Ciclovias$lenght = st_length(Ciclovias) 
-sum(Ciclovias$lenght) #acaba por ter 119,9 km
+sum(Ciclovias$lenght)
+# calma, há segmentos que foram destruídos entretanto
 ```
 
-<!-- #ver num mapa -->
-<!-- mapview(Ciclovias) #todas -->
+#### Ver num mapa
+Todas as ciclovias que existiram
+```{r}
+mapview::mapview(Ciclovias)
+```
+
 
 <!-- ## Reclassificar ciclovias em segregadas (uni e bi-direccionais) e banalizadas (30+bici, zona de coexistência) -->
 <!-- #meter tracejado o que não é segregado -->
