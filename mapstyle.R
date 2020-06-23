@@ -1,3 +1,4 @@
+library(cartography)
 greens = cartography::carto.pal(pal1 = "green.pal", 2)
 
 #definir estilo de mapa

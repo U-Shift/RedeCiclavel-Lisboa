@@ -1,0 +1,83 @@
+---
+title: "Rede Ciclável Liboa - Mapa animado"
+author: _RFélix_
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## RedeCiclavel-Lisboa
+Mapa animado com a evolução da rede ciclável em Lisboa desde 2001
+  
+A informação base está disponível no site de geodados da CML: 
+http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0
+
+## Este repositório contém duas funções:
+* GIF com evolução da rede ciclável em Lisboa, desde 20201
+* Mapa interactivo em html com slide para visualizar ao longo dos anos
+
+
+# GIF interactivo
+### Peparação dos dados
+Importar packages
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(sf)
+library(mapview)
+```
+
+Importar shapefiles Lisboa
+```{r include=FALSE}
+#Limites de Lisboa
+LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
+st_transform(LisboaLimite,  crs = 4326)
+```
+
+Importar rede ciclável
+```{r}
+CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") #actualizar para 2020 a partir do server da CML
+#st_write(CicloviasATUAL, "data/Ciclovias072020.shp")
+
+#alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial
+Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg") #voltar a importar
+```
+
+Acertar geometria
+```{r}
+sum(Ciclovias$lenght, na.rm=T)
+#(calma, há segmentos que foram destruídos entretanto)
+
+#recalcular geometria
+Ciclovias$lenght = st_length(Ciclovias) 
+sum(Ciclovias$lenght) #acaba por ter 119,9 km
+```
+
+<!-- #ver num mapa -->
+<!-- mapview(Ciclovias) #todas -->
+
+<!-- ## Reclassificar ciclovias em segregadas (uni e bi-direccionais) e banalizadas (30+bici, zona de coexistência) -->
+<!-- #meter tracejado o que não é segregado -->
+<!-- Ciclovias$TIPOLOGIA = as.character(Ciclovias$TIPOLOGIA) -->
+<!-- table(Ciclovias$TIPOLOGIA) -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel (Contraflow)"] = "Ciclovia segregada" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel"] = "Ciclovia segregada" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia segregada" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Unidirecional"] = "Ciclovia segregada" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Ponte"] = "Ciclovia segregada" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Zona de Coexistencia"] = "30+Bici" -->
+<!-- Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Bus+Bici"] = "30+Bici" -->
+<!-- table(Ciclovias$TIPOLOGIA)  -->
+
+
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -4,7 +4,7 @@ getwd()
 
 library(tidyverse)
 library(sf)
-library(cartography)
+#library(cartography)
 library(mapview)
 
 library(readxl)
@@ -25,16 +25,31 @@ library(purrr)
 LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
 st_transform(LisboaLimite,  crs = 4326)
 Ciclovias <-st_read("data/CicloviasOld.shp")
+mapview(Ciclovias)
+sum(Ciclovias$lenght)
 
 #actualizar para 2020 a partir do server da CML
 Ciclovias2020 = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson")
 #Ciclovias2020 <-st_read("data/Ciclovias2020.Rds")
+st_write(Ciclovias2020, "Ciclovias2020.shp")
 
 #meter tracejado o que não é segregado
-Ciclovias$Segregado <- "Sim"
-Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="30+Bici"] <- "Nao"
-Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="Bus+Bici"] <- "Nao"
-Ciclovias$Segregado[Ciclovias$TIPOLOGIA =="Zona de Coexistencia"] <- "Nao"
+Ciclovias$TIPOLOGIA = as.character(Ciclovias$TIPOLOGIA)
+table(Ciclovias$TIPOLOGIA)
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel (Contraflow)"] = "Ciclovia segregada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel"] = "Ciclovia segregada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia segregada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Unidirecional"] = "Ciclovia segregada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Zona de Coexistencia"] = "30+Bici"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Bus+Bici"] = "30+Bici"
+Ciclovias= Ciclovias[Ciclovias$TIPOLOGIA!="Ponte",]
+
+#Ciclovias$TIPOLOGIA[Ciclovias$OBJECTID==2142] = "Ciclovia segregada" #parque urbano vale da montanha
+#Ciclovias = Ciclovias %>% group_by(DESIGNACAO, TIPOLOGIA, ANO) %>% summarise(do_union=T) # nao tem o nome
+Ciclovias$lenght = st_length(Ciclovias)
+sum(Ciclovias$lenght)
+
+
 
 #ficar só com as segregadas e 30+bici
 Ciclovias2020$TIPOLOGIA = as.character(Ciclovias2020$TIPOLOGIA)
@@ -48,12 +63,15 @@ Ciclovias2020= Ciclovias2020[Ciclovias2020$TIPOLOGIA!="Percurso Ciclo-pedonal",]
 Ciclovias2020$TIPOLOGIA[Ciclovias2020$OBJECTID==2142] = "Ciclovia segregada" #parque urbano vale da montanha
 Ciclovias2020 = Ciclovias2020 %>% group_by(DESIGNACAO, TIPOLOGIA, ANO) %>% summarise(do_union=T)
 Ciclovias2020$lenght = st_length(Ciclovias2020)
+sum(Ciclovias2020$lenght)
 Ciclovias2020nome = Ciclovias2020
-Ciclovias2020 = Ciclovias2020[,c(2,4)]
+#Ciclovias2020 = Ciclovias2020[,c(2,4)]
 
 #mostrar num mapa interactivo
-mapview(Ciclovias2020, color = greens, lwd=1.5, popup=NULL, hide=T, legend=F)
+mapview(Ciclovias2020, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=F) +
+  mapview(Ciclovias, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
 
+#alguma coisa está mal, porque em 2020 só mostra 96,2km e em 2018 mostra 92,6km
 
 
 #adicionar ano acumulado
@@ -122,17 +140,17 @@ rm(Cic16)
 rm(Cic17)
 rm(Cic18)
 
-#Agrupar anos intervalos, por mandatos
-Ciclovias2018$Anos <- "2001 - 2008"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2009"] <- "2009 - 2012"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2010"] <- "2009 - 2012"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2011"] <- "2009 - 2012"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2012"] <- "2009 - 2012"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2013"] <- "2013 - 2016"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2014"] <- "2013 - 2016"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2016"] <- "2013 - 2016"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2017"] <- "2017 - 2018"
-Ciclovias2018$Anos[Ciclovias2018$AnoT == "2018"] <- "2017 - 2018"
+# #Agrupar anos intervalos, por mandatos
+# Ciclovias2018$Anos <- "2001 - 2008"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2009"] <- "2009 - 2012"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2010"] <- "2009 - 2012"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2011"] <- "2009 - 2012"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2012"] <- "2009 - 2012"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2013"] <- "2013 - 2016"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2014"] <- "2013 - 2016"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2016"] <- "2013 - 2016"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2017"] <- "2017 - 2018"
+# Ciclovias2018$Anos[Ciclovias2018$AnoT == "2018"] <- "2017 - 2018"
 
 #Adicionar campo com extensão da rede acumulada
 CicloviasKM <-Ciclovias2018T[,c(2,4)]
