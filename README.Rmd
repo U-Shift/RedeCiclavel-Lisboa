@@ -45,7 +45,7 @@ LisboaLimite = st_read("data/LisboaLimite.shp")
 ```{r}
 #actualizar para 2020 a partir do server da CML
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
-#st_write(CicloviasATUAL[,c(4,7,19)], "data/Ciclovias072020.shp") #data deste mês
+#st_write(CicloviasATUAL[,c(4,7,19)], "data/Ciclovias072020.shp", append=F) #data deste mês
 ```
 Alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial. 
 ```{r}
@@ -63,10 +63,11 @@ sum(Ciclovias$lenght)
 ```
 
 ### Ver num mapa
-Todas as ciclovias que existiram
+Todas as ciclovias que existem ou existiram
 ```{r}
 Ciclovias = Ciclovias %>% arrange(Ano)
-mapview::mapview(Ciclovias)
+Ciclovias$campo = as.integer(row.names(Ciclovias))
+#mapview::mapview(Ciclovias)
 ```
 
 ## Processar dados
@@ -93,7 +94,7 @@ mapview(Ciclovias, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
 ```
 
 ### Criar tabelas para cada ano
-```{r}
+```{r eval=FALSE, include=FALSE}
 Ciclovias$Ano = as.integer(Ciclovias$Ano)
 Ciclovias$AnoT = Ciclovias$Ano
 Cic01 = Ciclovias %>% subset(AnoT==2001)
@@ -144,6 +145,37 @@ sum(Cic20$lenght)
 ```
 
 ```{r}
+Ciclovias$AnoT = Ciclovias$Ano
+
+Cic <- lapply(2001:2020, function(i) {
+  subset(Ciclovias, AnoT == i)
+})
+Ciclovias2020T=Ciclovias[-c(1:nrow(Ciclovias)),] #para ter exaxtamente os mesmos campos que o Ciclovias
+
+for (i in 1:length(Cic)){
+  Ciclovias_ano <- Ciclovias[-c(1:nrow(Ciclovias)),] #idem
+  for (j in 1:i){
+    Ciclovias_ano <- rbind(Ciclovias_ano, Cic[[j]])
+    Ciclovias_ano$AnoT <- j+2000
+  }
+    Ciclovias2020T <- rbind(Ciclovias2020T, Ciclovias_ano)
+}
+```
+Remover as ciclovias que foram destruídas
+```{r}
+#remover corte do campo grande: construção do estádio Alvalade em 2003/2004
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==4 & Ciclovias2020T$AnoT>=2003),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==5 & Ciclovias2020T$AnoT>=2003),]
+#substituiçao do bici+BUS da avenida da liberdade pelas laterais
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==68 & Ciclovias2020T$AnoT>=2013),]
+#desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==161 & Ciclovias2020T$AnoT>=2018),]
+#é reformulada uma ciclovia na estrada da pontinha
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==29 & Ciclovias2020T$AnoT>=2018),]
+```
+
+
+```{r eval=FALSE, include=FALSE}
 #Todos em que houve alteração
 Ciclovias2020<- rbind(Cic01,Cic03,Cic05,Cic08,Cic09,Cic10,Cic11,Cic12,Cic13,Cic14,Cic16,Cic17,Cic18, Cic19, Cic20)
 #Adicionar anos nulos
@@ -157,7 +189,7 @@ rm(Cic01,Cic02,Cic03,Cic04,Cic05,Cic06,Cic07,Cic08,Cic09,Cic10,
 ###Adicionar contador de km
 ```{r}
 #Adicionar campo com extensão da rede acumulada
-CicloviasKM = Ciclovias2020T[,c(2,4)]
+CicloviasKM = Ciclovias2020T[,c(2,5)]
 st_geometry(CicloviasKM) = NULL
 CicloviasKM = CicloviasKM  %>% group_by(AnoT) %>% summarise_at(1, sum, na.rm=TRUE)
 
@@ -295,11 +327,11 @@ RedeCiclavelLxkm <- function(Year){
 ```
 ```{r}
 #passa-se aqui qualquer coisa, às vezes dá, se for acrescentanto um a um, outras vezes não.
-limite = ggplot()+geom_sf(LisboaLimite,mapping=aes(), color=NA)+mapTheme()
+limite = ggplot()+mapTheme()+geom_sf(LisboaLimite,mapping=aes(), color=NA)
 
 
 limite + geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia segregada"&AnoT==2020),
-                 aes(),color="#1A7832",size=0.9,show.legend=F) +
+                 color="#1A7832",size=0.9,show.legend=F, inherit.aes=T) +
   geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==2020),aes(),
           color="#AFD4A0",size=1,show.legend=F) +
   geom_text(data=subset(CicloviasKM,AnoT==2020),
