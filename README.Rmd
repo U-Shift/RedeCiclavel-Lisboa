@@ -294,18 +294,20 @@ RedeCiclavelLxkm <- function(Year){
 
 ```
 ```{r}
-ggplot()+
-  geom_sf(data= LisboaLimite, aes(),color = NA) +
-  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia segregada" & AnoT==2020),aes(),
-          color="#1A7832",size=1.1,show.legend=F) +
-  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==2020),aes(),
-          color="#AFD4A0",size=1.1,show.legend=F) +
-  geom_text(data=subset(CicloviasKM,AnoT==2020),
-            aes(x=-84000,y=-107000,label=Kms), size=6,inherit.aes=FALSE) +
-  facet_wrap(~AnoT, nrow=1)+
-  mapTheme()
+#passa-se aqui qualquer coisa, às vezes dá, se for acrescentanto um a um, outras vezes não.
+limite = ggplot()+geom_sf(LisboaLimite,mapping=aes(), color=NA)+mapTheme()
 
-  ggsave(filename=paste0("gif/",2021,"km.png"),
+
+limite + geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia segregada"&AnoT==2020),
+                 aes(),color="#1A7832",size=0.9,show.legend=F) +
+  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==2020),aes(),
+          color="#AFD4A0",size=1,show.legend=F) +
+  geom_text(data=subset(CicloviasKM,AnoT==2020),
+           aes(x=-84000,y=-107000,label=Kms), size=6,inherit.aes=F) +
+  facet_wrap(~AnoT, nrow=1)
+
+
+  ggsave(filename=paste0("gif/",2022,"km.png"),
          units="cm",width=20, height=18, dpi=400)
 ```
 
