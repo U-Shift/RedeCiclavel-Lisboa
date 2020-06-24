@@ -24,6 +24,11 @@ library(purrr)
 #Importar ficheiros shapefile
 LisboaLimite <-st_read("data/Lisboa_limite.gpkg")
 st_transform(LisboaLimite,  crs = 4326)
+# attr(LisboaLimite, "sf_column") = "geometry"
+# colnames(LisboaLimite)[colnames(LisboaLimite)=="geom"] <- "geometry"
+# st_write(LisboaLimite, "data/Lisboa_limitegeo.gpkg", append=F)
+# LisboaLimitegeo = st_read("data/Lisboa_limitegeo.gpkg")
+
 Ciclovias <-st_read("data/CicloviasOld.shp")
 mapview(Ciclovias)
 sum(Ciclovias$lenght)
@@ -115,30 +120,49 @@ Cic17$AnoT <- "2017"
 Cic18 <- rbind(Cic17,filter(Ciclovias,AnoT=="2018"))
 Cic18$AnoT <- "2018"
 
+
+# 
+# listaAnos = seq(1:20)+2000
+# nomeAnos = paste0("Ciclo",listaAnos)
+# 
+# function(){
+#   for (i in listaAnos){
+#     TABELA = Ciclovias %>% subset(AnoT=="i") %>% rbind(listaAnos[i-1]) %>% arrange(Ano)
+#   }
+# }
+#   
+# for (i in 2001:2020){
+#   Ciclovias %>% subset(AnoT=="i") %>% rbind(Cic02) %>% arrange(Ano)
+#   
+# }
+#   setNames(
+#     lapply(2001:2020, function(i) make_df(i,i)),
+#     paste0("Ciclo", 2001:2020))
+# 
+# 
+# Cic01 = Ciclovias %>% subset(AnoT=="2001")
+# Cic02 = Cic01
+# Cic02$AnoT = "2002" #não se passou nada
+# Cic03 = Ciclovias %>% subset(AnoT=="2003") %>% rbind(Cic02) %>% arrange(Ano)
+# Cic03$AnoT = "2003"
+# 
+# make_df <- function(n,var) {data.frame( a=(1:n)+var,b=(1:n)-var,c=(1:n)/var) }
+# 
+# mylist <- setNames( 
+#   lapply(1:100, function(n) make_df(n,n)) ,  # the dataframes
+#   paste0("d_", 1:100))   # the names for access
+
+
+
 #Todos em que houve alteração
 Ciclovias2018<- rbind(Cic01,Cic03,Cic05,Cic08,Cic09,Cic10,Cic11,Cic12,Cic13,Cic14,Cic16,Cic17,Cic18) #Tabela final
 #Adicionar anos nulos
 Ciclovias2018T<- rbind(Cic01,Cic02,Cic03,Cic04,Cic05,Cic06,Cic07,Cic08,Cic09,Cic10,Cic11,Cic12,Cic13,Cic14,Cic15,Cic16,Cic17,Cic18) #Tabela final
 
 #remover o que não interessa
-rm(Cic01) 
-rm(Cic02)
-rm(Cic03)
-rm(Cic04)
-rm(Cic05)
-rm(Cic06)
-rm(Cic07)
-rm(Cic08)
-rm(Cic09)
-rm(Cic10)
-rm(Cic11)
-rm(Cic12)
-rm(Cic13)
-rm(Cic14)
-rm(Cic15)
-rm(Cic16)
-rm(Cic17)
-rm(Cic18)
+rm(Cic01,Cic02,Cic03,Cic04,Cic05,Cic06,Cic07,Cic08,Cic09,
+   Cic10,Cic11,Cic12,Cic13,Cic14,Cic15,Cic16,Cic17,Cic18) 
+
 
 # #Agrupar anos intervalos, por mandatos
 # Ciclovias2018$Anos <- "2001 - 2008"
@@ -160,8 +184,9 @@ CicloviasKM <-summarise_at(CicloviasKM,c(1), sum, na.rm=TRUE)
 CicloviasKM$Km <- round(CicloviasKM$lenght/1000,digits = 0)
 CicloviasKM$Kmkm <- "km"
 CicloviasKM$Kms <- paste(CicloviasKM$Km,CicloviasKM$Kmkm, sep=" ")
+
 #join shapefile com table
-Pontos2 <- merge(GIScontagens,Pontos, by.x="Local", by.y="Names")
+#Pontos2 <- merge(GIScontagens,Pontos, by.x="Local", by.y="Names")
 
 
 ##gráficos## 
@@ -203,15 +228,15 @@ CicloviasAnocada$Ano <- as.character(CicloviasAnocada$Ano)
 
 
 
-#Gif dos anos sem km, verde e com separação se segregado, por piada
-RedeCiclavelLxVerde <- function(Year){
-  ggplot()+geom_sf(data=LisboaLimite,aes(),color = NA)+
-    geom_sf(data=filter(Ciclovias2018T,AnoT==Year),aes(linetype =factor(Segregado,levels=c("Sim","Nao"))),color="#33A02C",size=1.1,alpha=0.2,show.legend=F)+
-    facet_wrap(~AnoT, nrow=1) +mapTheme()
-  ggsave(filename=paste0(Year,".png"), units="cm",width=20, height=18, dpi=600)
-}
-seq(from = "2001", to="2018", by=1) %>% 
-  map_df(RedeCiclavelLxVerde)
+# #Gif dos anos sem km, verde e com separação se segregado, por piada
+# RedeCiclavelLxVerde <- function(Year){
+#   ggplot()+geom_sf(data=LisboaLimite,aes(),color = NA)+
+#     geom_sf(data=filter(Ciclovias2018T,AnoT==Year),aes(linetype =factor(Segregado,levels=c("Sim","Nao"))),color="#33A02C",size=1.1,alpha=0.2,show.legend=F)+
+#     facet_wrap(~AnoT, nrow=1) +mapTheme()
+#   ggsave(filename=paste0(Year,".png"), units="cm",width=20, height=18, dpi=600)
+# }
+# seq(from = "2001", to="2018", by=1) %>% 
+#   map_df(RedeCiclavelLxVerde)
 
 #com construção realçada, e km
 ggplot()+geom_sf(data=LisboaLimite,aes(),color = NA)+
