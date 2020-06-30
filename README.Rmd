@@ -45,8 +45,71 @@ LisboaLimite = st_read("data/LisboaLimite.shp")
 ```{r}
 #actualizar para 2020 a partir do server da CML
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
-#st_write(CicloviasATUAL[,c(4,7,19)], "data/Ciclovias072020.shp", append=F) #data deste mês
+#st_write(CicloviasATUAL[,c(1,4,7,19)], "data/Ciclovias072020.shp", append=F) #data deste mês
 ```
+Alterar segmentos aqui - rezar que o OJECTID não mude quando a CML altera a BD
+```{r include=FALSE}
+CicloviasCORRECT = CicloviasATUAL[,c(1,4,7,19)]
+
+#Remover os que estão a mais
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 1476 |CicloviasCORRECT$OBJECTID ==  2898 |CicloviasCORRECT$OBJECTID ==  313 | CicloviasCORRECT$OBJECTID == 2094),] #av ribeira das naus
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 2124 |CicloviasCORRECT$OBJECTID ==  3322 |CicloviasCORRECT$OBJECTID ==  2499),] #campo grande em toda a extenção
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 2312 |CicloviasCORRECT$OBJECTID ==  2313),] #travessa das recolhidas
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 609),]#braço de prata foi dividido em dois
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 1544 |CicloviasCORRECT$OBJECTID ==  1545 |CicloviasCORRECT$OBJECTID ==  1546 | CicloviasCORRECT$OBJECTID == 1547 |CicloviasCORRECT$OBJECTID ==  1581 | 
+CicloviasCORRECT$OBJECTID == 1582 ),]  #rio zezere
+
+# Adicionar segmentos que foram destruídos
+ADICIONAR = st_read("data/Adicionar.shp")
+ADICIONAR = st_transform(ADICIONAR, st_crs(CicloviasCORRECT))
+ADICIONAR$OBJECTID = as.integer(as.integer(rownames(ADICIONAR))+4000)
+CicloviasA = as.data.frame(CicloviasCORRECT)
+ADICIONARA = as.data.frame(ADICIONAR)
+CicloviasCORRECT = rbind(CicloviasA, ADICIONARA)
+CicloviasCORRECT = st_sf(CicloviasCORRECT, sf_column_name="geometry", crs = 4326)
+rm(ADICIONAR,ADICIONARA,CicloviasA)
+
+#Anos
+CicloviasCORRECT$ANO = as.integer(as.character(CicloviasCORRECT$ANO))
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1259]=2003
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2359 | CicloviasCORRECT$OBJECTID==1395| CicloviasCORRECT$OBJECTID==2360]=2005
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1190 | CicloviasCORRECT$OBJECTID==1154]=2008
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1301 | CicloviasCORRECT$OBJECTID==1003| CicloviasCORRECT$OBJECTID==1153 | CicloviasCORRECT$OBJECTID==1115| CicloviasCORRECT$OBJECTID==2139 | CicloviasCORRECT$OBJECTID==1542| CicloviasCORRECT$OBJECTID==2622 | CicloviasCORRECT$OBJECTID==1543| CicloviasCORRECT$OBJECTID==1226 | CicloviasCORRECT$OBJECTID==934]=2009
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2453 | CicloviasCORRECT$OBJECTID==1154| CicloviasCORRECT$OBJECTID==1860 | CicloviasCORRECT$OBJECTID==2641| CicloviasCORRECT$OBJECTID==1344 | CicloviasCORRECT$OBJECTID==1632| CicloviasCORRECT$OBJECTID==2456 | CicloviasCORRECT$OBJECTID==1890|
+CicloviasCORRECT$OBJECTID==1029 | CicloviasCORRECT$OBJECTID==1230|
+CicloviasCORRECT$OBJECTID==1257 | CicloviasCORRECT$OBJECTID==2486|
+CicloviasCORRECT$OBJECTID==2026 | CicloviasCORRECT$OBJECTID==2458|
+CicloviasCORRECT$OBJECTID==3015 | CicloviasCORRECT$OBJECTID==2488|
+CicloviasCORRECT$OBJECTID==2792 | CicloviasCORRECT$OBJECTID==2932]=2009
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2680 | CicloviasCORRECT$OBJECTID==2684| CicloviasCORRECT$OBJECTID==1037 | CicloviasCORRECT$OBJECTID==48| CicloviasCORRECT$OBJECTID==43 | CicloviasCORRECT$OBJECTID==45| CicloviasCORRECT$OBJECTID==39 | CicloviasCORRECT$OBJECTID==49| CicloviasCORRECT$OBJECTID==54 | CicloviasCORRECT$OBJECTID==55| CicloviasCORRECT$OBJECTID==56 |CicloviasCORRECT$OBJECTID==46 | CicloviasCORRECT$OBJECTID==51| CicloviasCORRECT$OBJECTID==52 | CicloviasCORRECT$OBJECTID==53 | CicloviasCORRECT$OBJECTID==41 | CicloviasCORRECT$OBJECTID==40 | CicloviasCORRECT$OBJECTID==47 | CicloviasCORRECT$OBJECTID==652 | CicloviasCORRECT$OBJECTID==1412 |CicloviasCORRECT$OBJECTID==444| CicloviasCORRECT$OBJECTID==446|CicloviasCORRECT$OBJECTID==447| CicloviasCORRECT$OBJECTID==448|CicloviasCORRECT$OBJECTID==450| CicloviasCORRECT$OBJECTID==449| CicloviasCORRECT$OBJECTID==442| CicloviasCORRECT$OBJECTID==417|
+CicloviasCORRECT$OBJECTID==2747| CicloviasCORRECT$OBJECTID==1141]=2010
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1434 | CicloviasCORRECT$OBJECTID==1588| CicloviasCORRECT$OBJECTID==2640 | CicloviasCORRECT$OBJECTID==1590| CicloviasCORRECT$OBJECTID==1589 | CicloviasCORRECT$OBJECTID==1766]=2011
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2434 | CicloviasCORRECT$OBJECTID==2433| CicloviasCORRECT$OBJECTID==1029 | CicloviasCORRECT$OBJECTID==2859| CicloviasCORRECT$OBJECTID==2858 |CicloviasCORRECT$OBJECTID==2365]=2012
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==656 | CicloviasCORRECT$OBJECTID==1765| CicloviasCORRECT$OBJECTID==1219 | CicloviasCORRECT$OBJECTID==1208| CicloviasCORRECT$OBJECTID==1218 |CicloviasCORRECT$OBJECTID==1763 | CicloviasCORRECT$OBJECTID==1216 | CicloviasCORRECT$OBJECTID==1217 | CicloviasCORRECT$OBJECTID==1452 | CicloviasCORRECT$OBJECTID==1764]=2013
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==257 | CicloviasCORRECT$OBJECTID==2099| CicloviasCORRECT$OBJECTID==3024 | CicloviasCORRECT$OBJECTID==1232| 
+CicloviasCORRECT$OBJECTID==769 | CicloviasCORRECT$OBJECTID==2361]=2014
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==922 | CicloviasCORRECT$OBJECTID==2881| CicloviasCORRECT$OBJECTID==2487 | CicloviasCORRECT$OBJECTID==2178 | CicloviasCORRECT$OBJECTID==2179]=2015
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2631]=2018
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==772 | CicloviasCORRECT$OBJECTID==513| CicloviasCORRECT$OBJECTID==511 | CicloviasCORRECT$OBJECTID==346| CicloviasCORRECT$OBJECTID==1137 | CicloviasCORRECT$OBJECTID==1174| CicloviasCORRECT$OBJECTID==1213 | CicloviasCORRECT$OBJECTID==1311| CicloviasCORRECT$OBJECTID==1403 | CicloviasCORRECT$OBJECTID==1484| CicloviasCORRECT$OBJECTID==2291 | CicloviasCORRECT$OBJECTID==2400| CicloviasCORRECT$OBJECTID==2544| CicloviasCORRECT$OBJECTID==2682 | CicloviasCORRECT$OBJECTID==3113| CicloviasCORRECT$OBJECTID==510 | CicloviasCORRECT$OBJECTID==514]=2019
+
+# Passeio dos Jacarandás
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1040 | CicloviasCORRECT$OBJECTID==1041| CicloviasCORRECT$OBJECTID==1164 | CicloviasCORRECT$OBJECTID==1166|  CicloviasCORRECT$OBJECTID==1196 | CicloviasCORRECT$OBJECTID==1197| CicloviasCORRECT$OBJECTID==2686 | CicloviasCORRECT$OBJECTID==2786]=2016
+
+
+st_write(CicloviasCORRECT, "data/CicloviasCORRECT.shp", append = F)
+
+#o 3024 deve estar mal, deve ser +4000
+
+
+#Tipologias
+mapview(CicloviasCORRECT, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
+
+
+
+
+
+```
+
 Alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial. 
 ```{r}
 #voltar a importar
@@ -80,10 +143,11 @@ Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel (Contraflow)"] = "Ciclo
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel"] = "Ciclovia segregada"
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia segregada"
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Unidirecional"] = "Ciclovia segregada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Ponte"] = "Ciclovia segregada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Ponte"] = "Ciclovia segregada" #tirar o ponte ciclo-pedonal
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Zona de Coexistencia"] = "Nao dedicada"
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Bus+Bici"] = "Nao dedicada"
 Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
+#tirar o "Percurso Ciclo-pedonal"?
 table(Ciclovias$TIPOLOGIA)
 ```
 #### Ver num mapa
@@ -163,15 +227,22 @@ for (i in 1:length(Cic)){
 ```
 Remover as ciclovias que foram destruídas
 ```{r}
-#remover corte do campo grande: construção do estádio Alvalade em 2003/2004
+##aqui somar 4000 ou ver qual o número que tinham... na shape Actualizar
+#remover corte do campo grande: construção do estádio Alvalade em 2003/2004 - 3317,3318, 3321
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==4 & Ciclovias2020T$AnoT>=2003),]
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==5 & Ciclovias2020T$AnoT>=2003),]
-#substituiçao do bici+BUS da avenida da liberdade pelas laterais
+#substituiçao do bici+BUS da avenida da liberdade pelas laterais - 4011
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==68 & Ciclovias2020T$AnoT>=2013),]
-#desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
+#desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia - 4006
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==161 & Ciclovias2020T$AnoT>=2018),]
 #é reformulada uma ciclovia na estrada da pontinha
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==29 & Ciclovias2020T$AnoT>=2018),]
+#É reformulada a do Campo Grande e desaparece um troço - 3314
+#Desaparece o encerramento da Av Ribeira das Naus ao transito - 1476, 2898, 313, 2094
+```
+```{r}
+cic20=Ciclovias2020T[Ciclovias2020T$AnoT==2020,]
+mapview(Cic20, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
 ```
 
 
