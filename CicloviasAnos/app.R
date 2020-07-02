@@ -1,6 +1,7 @@
 
 library(shiny)
 #library(shinymanager)
+library(shinyWidgets)
 library(sf)
 library(leaflet)
 library(dplyr)
@@ -12,15 +13,16 @@ CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp
 #credentials = readRDS("credentials.Rds") #load passwordmatch
 
 ui = fluidPage(
-  sliderInput(inputId = "Ano", "Ano:", 
-              min(CICLOVIAS$AnoT, na.rm = t),
-              max(CICLOVIAS$AnoT, na.rm = t),
-              value = 2001,
-              step = 1,
-              sep = "",
-              ticks = F,
-              animate = T,
-              width = 1000),
+  shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
+                         min(CICLOVIAS$AnoT, na.rm = t),
+                         max(CICLOVIAS$AnoT, na.rm = t),
+                         selected = "2010",
+                         choices = as.character(seq(2001,2020)),
+                        # sep = "",
+                        # grid = T,
+                         animate = animationOptions(interval = 2500),
+                         width = 900
+                         ),
   leafletOutput(outputId = "map",
                 height = 520)
 )
@@ -42,6 +44,7 @@ server = function(input, output) {
     leaflet() %>%
       addProviderTiles("CartoDB.Positron", group="mapa")%>%
       addProviderTiles("Esri.WorldImagery", group="satélite")%>%
+      fitBounds(-9.228815,38.69188,-9.09249,38.79549) %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
                    color = "#AFD4A0",
