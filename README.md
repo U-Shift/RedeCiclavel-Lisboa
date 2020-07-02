@@ -7,7 +7,7 @@ Este repositório contém duas funções:
 -------------------------------------
 
 -   GIF com evolução da rede ciclável em Lisboa, desde 20201
--   Mapa interactivo em html com slide para visualizar ao longo dos anos
+-   Mapa interactivo em html com slide para visualizar ao longo dos anos: <shiny.desv.io/ciclovias>
 
 GIF interactivo
 ===============
