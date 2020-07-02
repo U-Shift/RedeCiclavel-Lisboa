@@ -1,5 +1,6 @@
 
 library(shiny)
+#library(shinymanager)
 library(sf)
 library(leaflet)
 library(dplyr)
@@ -8,6 +9,7 @@ library(dplyr)
 # Define UI for application that draws a map
 CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp, lon, lat, and the accuracy (size of circles)
 #CICLOVIAS$AnoT=factor(CICLOVIAS$AnoT)
+#credentials = readRDS("credentials.Rds") #load passwordmatch
 
 ui = fluidPage(
   sliderInput(inputId = "Ano", "Ano:", 
@@ -15,11 +17,27 @@ ui = fluidPage(
               max(CICLOVIAS$AnoT, na.rm = t),
               value = 2001,
               step = 1,
+              sep = "",
+              ticks = F,
+              animate = T,
               width = 1000),
   leafletOutput(outputId = "map",
                 height = 520)
 )
+
+#ui <- secure_app(ui) #para iniciar com password
+
+
 server = function(input, output) {
+  # #login
+  #  res_auth <- secure_server(
+  #   check_credentials = check_credentials(credentials)
+  # )
+  # 
+  # output$auth_output <- renderPrint({
+  #   reactiveValuesToList(res_auth)
+  # })
+  
   output$map = renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.Positron", group="mapa")%>%
@@ -53,7 +71,8 @@ server = function(input, output) {
 
     
 }
-shinyApp(ui, server)
+
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)

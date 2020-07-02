@@ -56,8 +56,7 @@ CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 1476 |Ciclovi
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 2124 |CicloviasCORRECT$OBJECTID ==  3322 |CicloviasCORRECT$OBJECTID ==  2499),] #campo grande em toda a extenção
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 2312 |CicloviasCORRECT$OBJECTID ==  2313),] #travessa das recolhidas
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 609),]#braço de prata foi dividido em dois
-CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 1544 |CicloviasCORRECT$OBJECTID ==  1545 |CicloviasCORRECT$OBJECTID ==  1546 | CicloviasCORRECT$OBJECTID == 1547 |CicloviasCORRECT$OBJECTID ==  1581 | 
-CicloviasCORRECT$OBJECTID == 1582 ),]  #rio zezere
+CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$OBJECTID == 1544 |CicloviasCORRECT$OBJECTID ==  1545 |CicloviasCORRECT$OBJECTID ==  1546 | CicloviasCORRECT$OBJECTID == 1547 ),]  #rio zezere
 
 # Adicionar segmentos que foram destruídos
 ADICIONAR = st_read("data/Adicionar.shp")
@@ -69,51 +68,91 @@ CicloviasCORRECT = rbind(CicloviasA, ADICIONARA)
 CicloviasCORRECT = st_sf(CicloviasCORRECT, sf_column_name="geometry", crs = 4326)
 rm(ADICIONAR,ADICIONARA,CicloviasA)
 
+
 #Anos
 CicloviasCORRECT$ANO = as.integer(as.character(CicloviasCORRECT$ANO))
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1259]=2003
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2359 | CicloviasCORRECT$OBJECTID==1395| CicloviasCORRECT$OBJECTID==2360]=2005
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1190 | CicloviasCORRECT$OBJECTID==1154]=2008
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1301 | CicloviasCORRECT$OBJECTID==1003| CicloviasCORRECT$OBJECTID==1153 | CicloviasCORRECT$OBJECTID==1115| CicloviasCORRECT$OBJECTID==2139 | CicloviasCORRECT$OBJECTID==1542| CicloviasCORRECT$OBJECTID==2622 | CicloviasCORRECT$OBJECTID==1543| CicloviasCORRECT$OBJECTID==1226 | CicloviasCORRECT$OBJECTID==934]=2009
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2453 | CicloviasCORRECT$OBJECTID==1154| CicloviasCORRECT$OBJECTID==1860 | CicloviasCORRECT$OBJECTID==2641| CicloviasCORRECT$OBJECTID==1344 | CicloviasCORRECT$OBJECTID==1632| CicloviasCORRECT$OBJECTID==2456 | CicloviasCORRECT$OBJECTID==1890|
-CicloviasCORRECT$OBJECTID==1029 | CicloviasCORRECT$OBJECTID==1230|
-CicloviasCORRECT$OBJECTID==1257 | CicloviasCORRECT$OBJECTID==2486|
-CicloviasCORRECT$OBJECTID==2026 | CicloviasCORRECT$OBJECTID==2458|
-CicloviasCORRECT$OBJECTID==3015 | CicloviasCORRECT$OBJECTID==2488|
-CicloviasCORRECT$OBJECTID==2792 | CicloviasCORRECT$OBJECTID==2932]=2009
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2680 | CicloviasCORRECT$OBJECTID==2684| CicloviasCORRECT$OBJECTID==1037 | CicloviasCORRECT$OBJECTID==48| CicloviasCORRECT$OBJECTID==43 | CicloviasCORRECT$OBJECTID==45| CicloviasCORRECT$OBJECTID==39 | CicloviasCORRECT$OBJECTID==49| CicloviasCORRECT$OBJECTID==54 | CicloviasCORRECT$OBJECTID==55| CicloviasCORRECT$OBJECTID==56 |CicloviasCORRECT$OBJECTID==46 | CicloviasCORRECT$OBJECTID==51| CicloviasCORRECT$OBJECTID==52 | CicloviasCORRECT$OBJECTID==53 | CicloviasCORRECT$OBJECTID==41 | CicloviasCORRECT$OBJECTID==40 | CicloviasCORRECT$OBJECTID==47 | CicloviasCORRECT$OBJECTID==652 | CicloviasCORRECT$OBJECTID==1412 |CicloviasCORRECT$OBJECTID==444| CicloviasCORRECT$OBJECTID==446|CicloviasCORRECT$OBJECTID==447| CicloviasCORRECT$OBJECTID==448|CicloviasCORRECT$OBJECTID==450| CicloviasCORRECT$OBJECTID==449| CicloviasCORRECT$OBJECTID==442| CicloviasCORRECT$OBJECTID==417|
-CicloviasCORRECT$OBJECTID==2747| CicloviasCORRECT$OBJECTID==1141]=2010
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1434 | CicloviasCORRECT$OBJECTID==1588| CicloviasCORRECT$OBJECTID==2640 | CicloviasCORRECT$OBJECTID==1590| CicloviasCORRECT$OBJECTID==1589 | CicloviasCORRECT$OBJECTID==1766]=2011
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2434 | CicloviasCORRECT$OBJECTID==2433| CicloviasCORRECT$OBJECTID==1029 | CicloviasCORRECT$OBJECTID==2859| CicloviasCORRECT$OBJECTID==2858 |CicloviasCORRECT$OBJECTID==2365]=2012
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==656 | CicloviasCORRECT$OBJECTID==1765| CicloviasCORRECT$OBJECTID==1219 | CicloviasCORRECT$OBJECTID==1208| CicloviasCORRECT$OBJECTID==1218 |CicloviasCORRECT$OBJECTID==1763 | CicloviasCORRECT$OBJECTID==1216 | CicloviasCORRECT$OBJECTID==1217 | CicloviasCORRECT$OBJECTID==1452 | CicloviasCORRECT$OBJECTID==1764]=2013
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==257 | CicloviasCORRECT$OBJECTID==2099| CicloviasCORRECT$OBJECTID==3024 | CicloviasCORRECT$OBJECTID==1232| 
-CicloviasCORRECT$OBJECTID==769 | CicloviasCORRECT$OBJECTID==2361]=2014
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==922 | CicloviasCORRECT$OBJECTID==2881| CicloviasCORRECT$OBJECTID==2487 | CicloviasCORRECT$OBJECTID==2178 | CicloviasCORRECT$OBJECTID==2179]=2015
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==2631]=2018
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==772 | CicloviasCORRECT$OBJECTID==513| CicloviasCORRECT$OBJECTID==511 | CicloviasCORRECT$OBJECTID==346| CicloviasCORRECT$OBJECTID==1137 | CicloviasCORRECT$OBJECTID==1174| CicloviasCORRECT$OBJECTID==1213 | CicloviasCORRECT$OBJECTID==1311| CicloviasCORRECT$OBJECTID==1403 | CicloviasCORRECT$OBJECTID==1484| CicloviasCORRECT$OBJECTID==2291 | CicloviasCORRECT$OBJECTID==2400| CicloviasCORRECT$OBJECTID==2544| CicloviasCORRECT$OBJECTID==2682 | CicloviasCORRECT$OBJECTID==3113| CicloviasCORRECT$OBJECTID==510 | CicloviasCORRECT$OBJECTID==514]=2019
+#substituir por criação de lista, e depois filtrar por %in%
+ano2003 = c(1259)
+ano2005 = c(2359,1395,2360)
+ano2008 = c(1190,1154)
+ano2009 = c(1301,1003,1153,1115,2139,1542,2622,1543,1226,934,2453,1154,1860,2641,1344,1632,2456,1890,
+            1029,1230,1257,2486,2026,2458,3015,2488,1229,2326,2792,2932)
+ano2010 = c(2680,2684,1037,48,43,45,39,49,54,55,56,46,51,52,53,41,40,47,652,1412,444,446,447,448,450,
+            449,442,417,2747,1141)
+ano2011 = c(1434,1588,2640,1590,1589,1766)
+ano2012 = c(2434,2433,1029,2859,2858,2365)
+ano2013 = c(656,1765,1219,1208,1218,1763,1216,1217,1452,1764)
+ano2014 = c(257,2099,3024,1232,769,2361)
+ano2016 = c(1040,1041,1164,1166,1196,1197,2686,2786)
+ano2015 = c(922,2881,2487,2178,2179)
+ano2018 = c(2631)
+ano2019 = c(772,513,511,346,1137,1174,1213,1311,1403,1484,2291,2400,2544,2682,3113,510,514)
 
-# Passeio dos Jacarandás
-CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID==1040 | CicloviasCORRECT$OBJECTID==1041| CicloviasCORRECT$OBJECTID==1164 | CicloviasCORRECT$OBJECTID==1166|  CicloviasCORRECT$OBJECTID==1196 | CicloviasCORRECT$OBJECTID==1197| CicloviasCORRECT$OBJECTID==2686 | CicloviasCORRECT$OBJECTID==2786]=2016
-
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2003] = 2003
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2005] = 2005
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2008] = 2008
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2009] = 2009
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2010] = 2010
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2011] = 2011
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2012] = 2012
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2013] = 2013
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2014] = 2014
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2015] = 2015
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2016] = 2016
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2018] = 2018
+CicloviasCORRECT$ANO[CicloviasCORRECT$OBJECTID %in% ano2019] = 2019
 
 st_write(CicloviasCORRECT, "data/CicloviasCORRECT.shp", append = F)
 
 #o 3024 deve estar mal, deve ser +4000
 
+```
+Tipologias
+```{r}
+CicloviasCORRECT$TIPOLOGIA = as.character(CicloviasCORRECT$TIPOLOGIA)
+table(CicloviasCORRECT$TIPOLOGIA)
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Faixas Cicláveis ou Contrafluxos"] = "Ciclovia segregada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Faixa Ciclavel"] = "Ciclovia segregada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia segregada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia segregada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Pistas Cicláveis Unidirecionais"] = "Ciclovia segregada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Ponte"] = "Ciclovia segregada" #tirar o ponte ciclo-pedonal
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Zona de Coexistencia"] = "Nao dedicada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Bus+Bici"] = "Nao dedicada"
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
 
-#Tipologias
+pontes = c(1030,1031,1438,1733,2097,2277,2397,2398,2429,2430,2431,2432,2433,2434,2435,2436,2461,2462,2464,2465,2466,2467,2468,2469,2487,2494,2495,2496,2497,2971)
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$OBJECTID %in% pontes] = "Ciclovia segregada"
+
+
+#Casos particulares
+CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$OBJECTID==2453] = "Nao dedicada"
+
+#Nomes
+CicloviasCORRECT$DESIGNACAO[CicloviasCORRECT$DESIGNACAO=="---- Campo Grande"] = "Campo Grande"
+CicloviasCORRECT$DESIGNACAO[CicloviasCORRECT$DESIGNACAO=="---- Eixo Central"] = "Alta de Lisboa"
+
+
+#tirar o trilho
+CicloviasCORRECT = CicloviasCORRECT[CicloviasCORRECT$TIPOLOGIA!="Trilho",]
+
+#tirar o "Percurso Ciclo-pedonal"?
+table(CicloviasCORRECT$TIPOLOGIA)
+
+#guardar
+saveRDS(CicloviasCORRECT, "CicloviasAnos/CicloviasCORRECT.Rds")
+
+#ver num mapa
 mapview(CicloviasCORRECT, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
-
-
-
-
 
 ```
 
+
 Alterei alguns segmentos no QGIS, principalmente anos que não estão correctos na BD oficial. 
 ```{r}
-#voltar a importar
-Ciclovias <-st_read("data/Ciclovias2020Julho.gpkg")
+#renomear
+Ciclovias = CicloviasCORRECT
 ```
 
 
@@ -128,8 +167,6 @@ sum(Ciclovias$lenght)
 ### Ver num mapa
 Todas as ciclovias que existem ou existiram
 ```{r}
-Ciclovias = Ciclovias %>% arrange(Ano)
-Ciclovias$campo = as.integer(row.names(Ciclovias))
 #mapview::mapview(Ciclovias)
 ```
 
@@ -137,79 +174,20 @@ Ciclovias$campo = as.integer(row.names(Ciclovias))
 ### Reclassificar ciclovias
 Em __segregadas__ (uni e bi-direccionais) e __banalizadas__ (30+bici, zona de coexistência)
 ```{r}
-Ciclovias$TIPOLOGIA = as.character(Ciclovias$TIPOLOGIA)
-table(Ciclovias$TIPOLOGIA)
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel (Contraflow)"] = "Ciclovia segregada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclavel"] = "Ciclovia segregada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia segregada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Unidirecional"] = "Ciclovia segregada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Ponte"] = "Ciclovia segregada" #tirar o ponte ciclo-pedonal
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Zona de Coexistencia"] = "Nao dedicada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Bus+Bici"] = "Nao dedicada"
-Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
-#tirar o "Percurso Ciclo-pedonal"?
 table(Ciclovias$TIPOLOGIA)
 ```
 #### Ver num mapa
 ```{r}
 greens = cartography::carto.pal(pal1 = "green.pal", 2)
 greens = rev(greens)
-mapview(Ciclovias, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
+greens3 = cartography::carto.pal(pal1 = "green.pal", 3)
+greens3 = rev(greens3)
+mapview(Ciclovias, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
 ### Criar tabelas para cada ano
-```{r eval=FALSE, include=FALSE}
-Ciclovias$Ano = as.integer(Ciclovias$Ano)
-Ciclovias$AnoT = Ciclovias$Ano
-Cic01 = Ciclovias %>% subset(AnoT==2001)
-Cic02 = Cic01
-Cic02$AnoT = 2002 #não se passou nada
-Cic03 = Ciclovias %>% subset(AnoT==2003) %>% rbind(Cic02) %>% arrange(Ano)
-Cic03$AnoT = 2003
-Cic03 = Cic03[-c(4,5),] #remover corte do campo grande: construção do estádio Alvalade em 2003/2004
-Cic04 = Cic03
-Cic04$AnoT = 2004
-Cic05 = Ciclovias %>% subset(AnoT==2005) %>% rbind(Cic04) %>% arrange(Ano)
-Cic05$AnoT = 2005
-Cic06= Cic05
-Cic06$AnoT = 2006
-Cic07 = Cic06
-Cic07$AnoT = 2007
-Cic08 = Ciclovias %>% subset(AnoT==2008) %>% rbind(Cic07) %>% arrange(Ano)
-Cic08$AnoT = 2008
-Cic09 = Ciclovias %>% subset(AnoT==2009) %>% rbind(Cic08) %>% arrange(Ano)
-Cic09$AnoT = 2009
-Cic10 = Ciclovias %>% subset(AnoT==2010) %>% rbind(Cic09) %>% arrange(Ano)
-Cic10$AnoT = 2010
-Cic11 = Ciclovias %>% subset(AnoT==2011) %>% rbind(Cic10) %>% arrange(Ano)
-Cic11$AnoT = 2011
-Cic12 = Ciclovias %>% subset(AnoT==2012) %>% rbind(Cic11) %>% arrange(Ano)
-Cic12$AnoT = 2012
-Cic13 = Ciclovias %>% subset(AnoT==2013) %>% rbind(Cic12) %>% arrange(Ano)
-Cic13$AnoT = 2013
-Cic13 = Cic13[-c(66),] #substituiçao do bici+BUS da avenida da liberdade pelas laterais
-Cic14 = Ciclovias %>% subset(AnoT==2014) %>% rbind(Cic13) %>% arrange(Ano)
-Cic14$AnoT = 2014
-Cic15 = Cic14 #nada de novo
-Cic15$AnoT = 2015
-Cic16 = Ciclovias %>% subset(AnoT==2016) %>% rbind(Cic15) %>% arrange(Ano)
-Cic16$AnoT = 2016
-Cic17 = Ciclovias %>% subset(AnoT==2017) %>% rbind(Cic16) %>% arrange(Ano)
-Cic17$AnoT = 2017
-Cic18 = Ciclovias %>% subset(AnoT==2018) %>% rbind(Cic17) %>% arrange(Ano)
-Cic18$AnoT = 2018
-Cic18 = Cic18[-c(27,152),] #desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia. é reformulada uma ciclovia na estrada da pontinha
-Cic19 = Ciclovias %>% subset(AnoT==2019) %>% rbind(Cic18) %>% arrange(Ano)
-Cic19$AnoT = 2019
-Cic20 = Ciclovias %>% subset(AnoT==2020) %>% rbind(Cic19) %>% arrange(Ano)
-Cic20$AnoT = 2020
-sum(Cic20$lenght)
-#melhorar isto para uma função, remover as ciclovias depois em todos os anos dali para a frente
-
-```
-
 ```{r}
-Ciclovias$AnoT = Ciclovias$Ano
+Ciclovias$AnoT = Ciclovias$ANO
 
 Cic <- lapply(2001:2020, function(i) {
   subset(Ciclovias, AnoT == i)
@@ -227,66 +205,64 @@ for (i in 1:length(Cic)){
 ```
 Remover as ciclovias que foram destruídas
 ```{r}
-##aqui somar 4000 ou ver qual o número que tinham... na shape Actualizar
-#remover corte do campo grande: construção do estádio Alvalade em 2003/2004 - 3317,3318, 3321
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==4 & Ciclovias2020T$AnoT>=2003),]
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==5 & Ciclovias2020T$AnoT>=2003),]
-#substituiçao do bici+BUS da avenida da liberdade pelas laterais - 4011
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==68 & Ciclovias2020T$AnoT>=2013),]
-#desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia - 4006
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==161 & Ciclovias2020T$AnoT>=2018),]
+#remover corte do campo grande: construção do estádio Alvalade em 2003/2004
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4016 & Ciclovias2020T$AnoT>=2003),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4015 & Ciclovias2020T$AnoT>=2003),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4019 & Ciclovias2020T$AnoT>=2003),]
+#substituiçao do bici+BUS da avenida da liberdade pelas laterais
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4011 & Ciclovias2020T$AnoT>=2013),]
+#Desaparece o encerramento da Av Ribeira das Naus ao transito
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==1476 & Ciclovias2020T$AnoT>=2014),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==2898 & Ciclovias2020T$AnoT>=2014),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==313 & Ciclovias2020T$AnoT>=2014),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==2094 & Ciclovias2020T$AnoT>=2014),]
+#É reformulada a do Campo Grande e desaparece um troço
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4012 & Ciclovias2020T$AnoT>=2017),]
+#desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==4006 & Ciclovias2020T$AnoT>=2018),]
 #é reformulada uma ciclovia na estrada da pontinha
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$campo==29 & Ciclovias2020T$AnoT>=2018),]
-#É reformulada a do Campo Grande e desaparece um troço - 3314
-#Desaparece o encerramento da Av Ribeira das Naus ao transito - 1476, 2898, 313, 2094
+#Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$OBJECTID==29 & Ciclovias2020T$AnoT>=2018),]
 ```
+
 ```{r}
 cic20=Ciclovias2020T[Ciclovias2020T$AnoT==2020,]
-mapview(Cic20, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
+mapview(cic20, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
 ```
 
-
-```{r eval=FALSE, include=FALSE}
-#Todos em que houve alteração
-Ciclovias2020<- rbind(Cic01,Cic03,Cic05,Cic08,Cic09,Cic10,Cic11,Cic12,Cic13,Cic14,Cic16,Cic17,Cic18, Cic19, Cic20)
-#Adicionar anos nulos
-Ciclovias2020T<- rbind(Cic01,Cic02,Cic03,Cic04,Cic05,Cic06,Cic07,Cic08,Cic09,Cic10,Cic11,Cic12,Cic13,Cic14,Cic15,Cic16,Cic17,Cic18,Cic19,Cic20) #Tabela final
-
-#remover o que não interessa
-rm(Cic01,Cic02,Cic03,Cic04,Cic05,Cic06,Cic07,Cic08,Cic09,Cic10,
-   Cic11,Cic12,Cic13,Cic14,Cic15,Cic16,Cic17,Cic18,Cic19,Cic20) 
-```
 
 ###Adicionar contador de km
 ```{r}
 #Adicionar campo com extensão da rede acumulada
-CicloviasKM = Ciclovias2020T[,c(2,5)]
+CicloviasKM = Ciclovias2020T[,c(3,5,6)]
 st_geometry(CicloviasKM) = NULL
-CicloviasKM = CicloviasKM  %>% group_by(AnoT) %>% summarise_at(1, sum, na.rm=TRUE)
+CicloviasKM = CicloviasKM  %>% group_by(AnoT, TIPOLOGIA) %>% summarise_at(1, sum, na.rm=TRUE)
 
 #CicloviasKM$Km <- round(CicloviasKM$lenght,digits = 0)
 #CicloviasKM$Kmkm <- "km"
 CicloviasKM$Kms <- paste(round(CicloviasKM$lenght,digits = 0),"km", sep=" ")
 ```
 
-### Juntar cada ano numa só feature
+### Juntar cada ano e nome numa só feature
 Porque senão ficava muito lento
 ```{r}
-CicloviasAnos = Ciclovias2020T %>% group_by(TIPOLOGIA,AnoT) %>% summarise_at(1, sum, na.rm=TRUE) %>% st_union(by_feature=T)
+CicloviasAnos = Ciclovias2020T %>% group_by(DESIGNACAO,TIPOLOGIA,AnoT) %>% summarise_at(1, sum, na.rm=TRUE) 
+#%>% st_union(by_feature=T)
+
+saveRDS(CicloviasAnos, "CicloviasAnos/CicloviasAnos.Rds")
 ```
 
 ## Processar as imagens para o gif
 
 #### criar elementos vazios nos anos em que nao aconteceu nada
 ```{r}
-vazios <-data.frame(TIPOLOGIA = as.character(NA),
-                   lenght = 0,
-                   Ano = as.integer(c(2002,2004,2006,2007,2015)))
-vazios$AnoT <-vazios$Ano
-vazios$geom<-st_sfc(st_multilinestring())
-vazios<-st_sf(vazios, crs=4326)
-vazios$lenght = units::set_units(vazios$lenght, km)
-CicloviasGif = rbind(Ciclovias, vazios)
+# vazios <-data.frame(TIPOLOGIA = as.character(NA),
+#                    lenght = 0,
+#                    Ano = as.integer(c(2002,2004,2006,2007,2015)))
+# vazios$AnoT <-vazios$Ano
+# vazios$geom<-st_sfc(st_multilinestring())
+# vazios<-st_sf(vazios, crs=4326)
+# vazios$lenght = units::set_units(vazios$lenght, km)
+# CicloviasGif = rbind(Ciclovias, vazios)
 ```
 
 ### Criar os GIF
