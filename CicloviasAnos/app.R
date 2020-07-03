@@ -12,7 +12,11 @@ CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp
 #CICLOVIAS$AnoT=factor(CICLOVIAS$AnoT)
 #credentials = readRDS("credentials.Rds") #load passwordmatch
 
-ui = fluidPage(
+ui = 
+  fluidPage(
+    navbarPage("Ciclovias em Lisboa",
+               tabPanel("Mapa",
+                        
   shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                          min(CICLOVIAS$AnoT, na.rm = t),
                          max(CICLOVIAS$AnoT, na.rm = t),
@@ -25,6 +29,17 @@ ui = fluidPage(
                          ),
   leafletOutput(outputId = "map",
                 height = 520)
+               ),
+  
+  tabPanel("Sobre",
+           h2("texto com coisas"),
+           "texto com ainda mais coisas"),
+
+  tabPanel("Código",icon = icon("github"),
+           a(href = "https://github.com/rstudio/shinydashboard/", "Link para o repositório")
+           )
+        
+    ) 
 )
 
 #ui <- secure_app(ui) #para iniciar com password
