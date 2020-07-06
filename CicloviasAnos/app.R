@@ -7,42 +7,60 @@ library(leaflet)
 library(dplyr)
 
 
-# Define UI for application that draws a map
+#bases de dados
 CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp, lon, lat, and the accuracy (size of circles)
 #CICLOVIAS$AnoT=factor(CICLOVIAS$AnoT)
 #credentials = readRDS("credentials.Rds") #load passwordmatch
+
+#conteúdo da parte de cima do mapa
+slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
+                     min(CICLOVIAS$AnoT, na.rm = t),
+                     max(CICLOVIAS$AnoT, na.rm = t),
+                     selected = "2010",
+                     choices = as.character(seq(2001,2020)),
+                   # sep = "",
+                   # grid = T,
+                     animate = animationOptions(interval = 2000),
+                     width = "100%"
+                      )             
+                )
+
+
+kilometros = column(3, "kilómetros"
+                    #inserir aqui a tabela de total km por tipologia
+                    )
+
+
+# Define UI for application that draws a map
+# estrutura da página
 
 ui = 
   fluidPage(
     navbarPage("Ciclovias em Lisboa",
                tabPanel("Mapa",
-                        
-  shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
-                         min(CICLOVIAS$AnoT, na.rm = t),
-                         max(CICLOVIAS$AnoT, na.rm = t),
-                         selected = "2010",
-                         choices = as.character(seq(2001,2020)),
-                        # sep = "",
-                        # grid = T,
-                         animate = animationOptions(interval = 2500),
-                         width = 900
-                         ),
-  leafletOutput(outputId = "map",
-                height = 520)
-               ),
+                fluidRow(slider,
+                        kilometros
+                        ),
+  
+                    leafletOutput(outputId = "map",
+                                  height = 600)
+                                 ),
   
   tabPanel("Sobre",
            h2("texto com coisas"),
+           br(),
            "texto com ainda mais coisas"),
 
   tabPanel("Código",icon = icon("github"),
-           a(href = "https://github.com/rstudio/shinydashboard/", "Link para o repositório")
+           a(href = "https://github.com/rstudio/shinydashboard/", "Link para o repositório"),  
+           div("Se detectares erros indica aqui :)")
            )
         
     ) 
 )
 
 #ui <- secure_app(ui) #para iniciar com password
+
 
 
 server = function(input, output) {
@@ -60,13 +78,25 @@ server = function(input, output) {
       addProviderTiles("CartoDB.Positron", group="mapa")%>%
       addProviderTiles("Esri.WorldImagery", group="satélite")%>%
       fitBounds(-9.228815,38.69188,-9.09249,38.79549) %>% 
+      addLayersControl(overlayGroups = c("Ciclovias","30+Bici ou Não dedicada","Percurso Ciclo-pedonal"),
+                       baseGroups = c("mapa", "satélite"),
+                       options = layersControlOptions(collapsed = F))%>%
+      hideGroup(c("Percurso Ciclo-pedonal")) %>% 
+      addLegend(position = "bottomright", colors = c("#1A7832","#AFD4A0"), 
+                labels = c("Ciclovia segregada", "Segemento não dedicado"))
+      
+      })
+  
+  observe({
+    leafletProxy("map") %>% 
+      clearShapes() %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
                    color = "#AFD4A0",
                    weight = 1.5,
                    dashArray = 10,
                    opacity = 3,
-                   group = "Percurso Ciclo-pedonal") %>% 
+                   group = "Percurso Ciclo-pedonal") %>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
                    color = "#AFD4A0",
@@ -78,16 +108,12 @@ server = function(input, output) {
                    color = "#1A7832",
                    weight = 2,
                    opacity = 3,
-                   group = "Ciclovias")%>%
-      addLayersControl(overlayGroups = c("Ciclovias","30+Bici ou Não dedicada","Percurso Ciclo-pedonal"),
-                       baseGroups = c("mapa", "satélite"),
-                       options = layersControlOptions(collapsed = F))%>%
-      addLegend(position = "bottomright", colors = c("#1A7832","#AFD4A0"), 
-                labels = c("Ciclovia segregada", "Segemento não dedicado"))
-      
-      })
-
+                   group = "Ciclovias")
     
+    
+  })
+
+    #começar apenas com as ciclovias seleccionadas
 }
 
 

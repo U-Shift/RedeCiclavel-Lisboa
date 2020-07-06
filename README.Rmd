@@ -45,6 +45,8 @@ LisboaLimite = st_read("data/LisboaLimite.shp")
 ```{r}
 #actualizar para 2020 a partir do server da CML
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
+
+CicloviasVELHA = CicloviasATUAL
 #st_write(CicloviasATUAL[,c(1,4,7,19)], "data/Ciclovias072020.shp", append=F) #data deste mês
 ```
 Alterar segmentos aqui - rezar que o OJECTID não mude quando a CML altera a BD
