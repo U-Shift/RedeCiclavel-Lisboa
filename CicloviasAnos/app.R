@@ -5,6 +5,7 @@ library(shinyWidgets)
 library(sf)
 library(leaflet)
 library(dplyr)
+#library(htmltools)
 
 
 #bases de dados
@@ -93,14 +94,17 @@ server = function(input, output) {
                                       CICLOVIAS$TIPOLOGIA == "Ciclovia segregada", ],
                    color = "#1A7832",
                    weight = 3,
-                   opacity = 3,
+                   opacity = 1,
+                   smoothFactor = 1, 
                    options = pathOptions(pane = "acima"),
+                   popup = ~DESIGNACAO,
                    group = "Ciclovias") %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
                    color = "#AFD4A0",
                    weight = 2,
-                   opacity = 3,
+                   opacity = 1,
+                   smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
@@ -108,7 +112,8 @@ server = function(input, output) {
                    color = "#AFD4A0",
                    weight = 1.5,
                    dashArray = 10,
-                   opacity = 3,
+                   opacity = 1,
+                   smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
                    group = "Percurso Ciclo-pedonal")
     
