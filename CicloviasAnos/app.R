@@ -1,16 +1,16 @@
 
 library(shiny)
-#library(shinymanager)
 library(shinyWidgets)
 library(sf)
 library(leaflet)
 library(dplyr)
+#library(shinymanager)
 #library(htmltools)
 
 
 #bases de dados
-CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp, lon, lat, and the accuracy (size of circles)
-#CICLOVIAS$AnoT=factor(CICLOVIAS$AnoT)
+CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
+QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
 
 #conteúdo da parte de cima do mapa
@@ -26,9 +26,13 @@ slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:",
                       )             
                 )
 
+#nada = column(1, offset = 0, style="padding:0px;")
 
-kilometros = column(3, "kilómetros"
-                    #inserir aqui a tabela de total km por tipologia
+kilometros = column(3, 
+                    tags$h4("Extensão da rede"),
+                    tags$h5(textOutput("kmsciclovias")),
+                    tags$h5(textOutput("kmsoutras"))
+                    #converter para tabela?
                     )
 
 
@@ -40,8 +44,9 @@ ui =
     navbarPage("Ciclovias em Lisboa",
                tabPanel("Mapa",
                 fluidRow(slider,
-                        kilometros
-                        ),
+                       #  nada,
+                         kilometros
+                         ),
   
                 tags$style(type = "text/css", "#map {height: calc(100vh - 190px) !important;}"), #mapa com a altura da janela do browser menos as barras de cima
                 leafletOutput(outputId = "map")
@@ -106,6 +111,7 @@ server = function(input, output) {
                    opacity = 1,
                    smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
+                   popup = ~DESIGNACAO,
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
@@ -115,10 +121,20 @@ server = function(input, output) {
                    opacity = 1,
                    smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
+                   popup = ~DESIGNACAO,
                    group = "Percurso Ciclo-pedonal")
     
   })
 
+  output$kmsciclovias <- renderText({
+    paste0("Ciclovias segregadas: ",
+      QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Ciclovia segregada"])
+  })
+  output$kmsoutras <- renderText({
+    paste0("30+Bici ou Não dedicada: ",
+           QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Nao dedicada"])
+  })
+  
 }
 
 
