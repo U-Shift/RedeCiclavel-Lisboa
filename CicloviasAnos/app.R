@@ -10,7 +10,7 @@ library(dplyr)
 #bases de dados
 CICLOVIAS = readRDS("CicloviasAnos.Rds")# loading the data. It has the timestamp, lon, lat, and the accuracy (size of circles)
 #CICLOVIAS$AnoT=factor(CICLOVIAS$AnoT)
-#credentials = readRDS("credentials.Rds") #load passwordmatch
+
 
 #conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
@@ -45,33 +45,30 @@ ui =
                 tags$style(type = "text/css", "#map {height: calc(100vh - 190px) !important;}"), #mapa com a altura da janela do browser menos as barras de cima
                 leafletOutput(outputId = "map")
                                  ),
+   tabPanel("GIF",
+             h2("GIF animado da evolução da rede ciclável"),
+             br(),
+             "_work in progress_"),
   
-  tabPanel("Sobre",
-           h2("texto com coisas"),
-           br(),
-           "texto com ainda mais coisas"),
+   tabPanel("Sobre",
+            h2("texto com coisas"),
+            br(),
+            "texto com ainda mais coisas"),
 
-  tabPanel("Código",icon = icon("github"),
-           a(href = "https://github.com/rstudio/shinydashboard/", "Link para o repositório"),  
-           div("Se detectares erros indica aqui :)")
-           )
+   tabPanel("Código",icon = icon("github"),
+            a(href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", "Link para o repositório"),  
+            br(),
+            div("Se detectares erros indica aqui :)")
+            )
         
-    ) 
-)
-
-#ui <- secure_app(ui) #para iniciar com password
+    ) #fecha o navbar 
+) #fecha a estrutura do ui
 
 
+## magia começa aqui ##
 
 server = function(input, output) {
-  # #login
-  #  res_auth <- secure_server(
-  #   check_credentials = check_credentials(credentials)
-  # )
-  # 
-  # output$auth_output <- renderPrint({
-  #   reactiveValuesToList(res_auth)
-  # })
+
   
   output$map = renderLeaflet({
     leaflet() %>%
@@ -90,17 +87,21 @@ server = function(input, output) {
   observe({
     leafletProxy("map") %>% 
       clearShapes() %>% 
+      addMapPane("abaixo", zIndex = 200) %>% # shown below
+      addMapPane("acima", zIndex = 300) %>% # shown above
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Ciclovia segregada", ],
                    color = "#1A7832",
                    weight = 3,
                    opacity = 3,
+                   options = pathOptions(pane = "acima"),
                    group = "Ciclovias") %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
                    color = "#AFD4A0",
                    weight = 2,
                    opacity = 3,
+                   options = pathOptions(pane = "abaixo"),
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
@@ -108,11 +109,11 @@ server = function(input, output) {
                    weight = 1.5,
                    dashArray = 10,
                    opacity = 3,
+                   options = pathOptions(pane = "abaixo"),
                    group = "Percurso Ciclo-pedonal")
     
   })
 
-    #começar apenas com as ciclovias seleccionadas
 }
 
 
