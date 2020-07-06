@@ -91,12 +91,11 @@ server = function(input, output) {
     leafletProxy("map") %>% 
       clearShapes() %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
-                                      CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
-                   color = "#AFD4A0",
-                   weight = 1.5,
-                   dashArray = 10,
+                                      CICLOVIAS$TIPOLOGIA == "Ciclovia segregada", ],
+                   color = "#1A7832",
+                   weight = 3,
                    opacity = 3,
-                   group = "Percurso Ciclo-pedonal") %>%
+                   group = "Ciclovias") %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
                    color = "#AFD4A0",
@@ -104,12 +103,12 @@ server = function(input, output) {
                    opacity = 3,
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
-                                      CICLOVIAS$TIPOLOGIA == "Ciclovia segregada", ],
-                   color = "#1A7832",
-                   weight = 2,
+                                      CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
+                   color = "#AFD4A0",
+                   weight = 1.5,
+                   dashArray = 10,
                    opacity = 3,
-                   group = "Ciclovias")
-    
+                   group = "Percurso Ciclo-pedonal")
     
   })
 
