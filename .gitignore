@@ -37,3 +37,4 @@ vignettes/*.pdf
 CicloviasAnos/credentials.Rds
 password.R
 .RData
+report.R

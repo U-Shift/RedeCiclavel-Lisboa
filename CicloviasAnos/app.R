@@ -42,8 +42,8 @@ ui =
                         kilometros
                         ),
   
-                    leafletOutput(outputId = "map",
-                                  height = 600)
+                tags$style(type = "text/css", "#map {height: calc(100vh - 190px) !important;}"), #mapa com a altura da janela do browser menos as barras de cima
+                leafletOutput(outputId = "map")
                                  ),
   
   tabPanel("Sobre",
@@ -77,7 +77,7 @@ server = function(input, output) {
     leaflet() %>%
       addProviderTiles("CartoDB.Positron", group="mapa")%>%
       addProviderTiles("Esri.WorldImagery", group="satélite")%>%
-      fitBounds(-9.228815,38.69188,-9.09249,38.79549) %>% 
+      fitBounds(-9.25,38.692,-9.06,38.793) %>%       
       addLayersControl(overlayGroups = c("Ciclovias","30+Bici ou Não dedicada","Percurso Ciclo-pedonal"),
                        baseGroups = c("mapa", "satélite"),
                        options = layersControlOptions(collapsed = F))%>%
