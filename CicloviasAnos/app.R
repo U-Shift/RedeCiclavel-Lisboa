@@ -4,6 +4,8 @@ library(shinyWidgets)
 library(sf)
 library(leaflet)
 library(dplyr)
+library(ggplot2)
+library(units)
 #library(shinymanager)
 #library(htmltools)
 
@@ -15,12 +17,12 @@ QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
 
 #conteúdo das páginas
-## sobre
 
 ## gif
 
-##codigo
+## sobre
 
+##codigo
 
 
 
@@ -70,7 +72,11 @@ ui =
    tabPanel("Gráfico",icon = icon("chart-bar"),
             h2("Extensão das ciclovias por ano"),
             br(),
-            "_work in progress_"),
+            fluidRow(column(8, offset = 2,
+                 tags$style(type = "text/css", "#grafico {height: calc(100vh - 200px) !important;}"), #altura responsive
+                 plotOutput("grafico")
+            ))
+            ),
    
    tabPanel("Sobre",icon = icon("info"),
             h2("texto com coisas"),
@@ -91,7 +97,7 @@ ui =
 
 server = function(input, output) {
 
-  
+  #mapa
   output$map = renderLeaflet({
     leaflet() %>%
       addProviderTiles("CartoDB.Positron", group="mapa")%>%
@@ -141,7 +147,8 @@ server = function(input, output) {
                    group = "Percurso Ciclo-pedonal")
     
   })
-
+  
+  #tabela dos quilómetros
   output$kmsciclovias <- renderText({
     paste0("Ciclovias segregadas: ",
       QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Ciclovia segregada"])
@@ -150,6 +157,27 @@ server = function(input, output) {
     paste0("30+Bici ou Não dedicada: ",
            QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Nao dedicada"])
   })
+  
+  #gráfico
+  output$grafico <- renderPlot({
+   ggplot(QUILOMETROS[QUILOMETROS$TIPOLOGIA!="Percurso Ciclo-pedonal",],
+          aes(factor(AnoT), drop_units(lenght), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia segregada")))
+          ) +
+      geom_bar(stat="identity") +
+      scale_fill_manual(values= c("#AFD4A0","#1A7832"), "Tipologia: ") +
+      scale_y_continuous(breaks = seq(0,100,20)) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle=90, vjust = 0.5),
+            text = element_text(size = 16),
+            legend.position="bottom") +
+    labs(x="Ano",
+         y="Extensão [km]"
+         # title="Extensão da rede ciclável",
+         # subtitle="Comprimento da rede ciclável em Lisboa, acumulado por ano"
+         )
+
+    }
+  )
   
 }
 
