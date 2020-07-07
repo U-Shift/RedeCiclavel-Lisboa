@@ -18,12 +18,10 @@ QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
 #conteúdo das páginas
 
-## gif
 
 ## sobre
 
-##codigo
-
+## codigo
 
 
 #conteúdo da parte de cima do mapa
@@ -65,9 +63,13 @@ ui =
                 leafletOutput(outputId = "map")
                                  ),
    tabPanel("GIF",icon = icon("play-circle"),
-             h2("GIF animado da evolução da rede ciclável"),
-             br(),
-             "_work in progress_"),
+            h2("Evolução da rede ciclável em Lisboa"),
+            br(),
+            fluidRow(column(8, offset = 3,
+            img(src="http://web.tecnico.ulisboa.pt/~rosamfelix/gis/contagens/RedeCiclavelLisboa2020.gif", align = "center",height="500px")
+            # img(src="pasta/RedeCiclavelLisboa2020.gif", align = "center",height="500px")
+                )) #alterar pelo path correcto!
+            ),
   
    tabPanel("Gráfico",icon = icon("chart-bar"),
             h2("Extensão das ciclovias por ano"),
@@ -93,7 +95,7 @@ ui =
 ) #fecha a estrutura do ui
 
 
-## magia começa aqui ##
+########## magia começa aqui ###############
 
 server = function(input, output) {
 
@@ -175,9 +177,7 @@ server = function(input, output) {
          # title="Extensão da rede ciclável",
          # subtitle="Comprimento da rede ciclável em Lisboa, acumulado por ano"
          )
-
-    }
-  )
+    })
   
 }
 
