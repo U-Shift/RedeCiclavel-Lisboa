@@ -237,11 +237,18 @@ mapview(cic20, zcol="TIPOLOGIA", color = greens, lwd=1.5, hide=T, legend=T)
 #Adicionar campo com extensão da rede acumulada
 CicloviasKM = Ciclovias2020T[,c(3,5,6)]
 st_geometry(CicloviasKM) = NULL
+CicloviasKMnull = data.frame(TIPOLOGIA= c("Nao dedicada", "Nao dedicada"),
+                             lenght=0, AnoT = c(2001,2002),stringsAsFactors=FALSE)
+CicloviasKMnull$lenght = CicloviasKMnull$lenght %>% units::set_units(km)
+CicloviasKM = rbind(CicloviasKM,CicloviasKMnull)
+
 CicloviasKM = CicloviasKM  %>% group_by(AnoT, TIPOLOGIA) %>% summarise_at(1, sum, na.rm=TRUE)
 
-#CicloviasKM$Km <- round(CicloviasKM$lenght,digits = 0)
-#CicloviasKM$Kmkm <- "km"
 CicloviasKM$Kms <- paste(round(CicloviasKM$lenght,digits = 0),"km", sep=" ")
+
+
+#saveRDS(CicloviasKM, "CicloviasAnos/CicloviasKM.Rds")
+#rm(CicloviasKMnull)
 ```
 
 ### Juntar cada ano e nome numa só feature
@@ -251,6 +258,7 @@ CicloviasAnos = Ciclovias2020T %>% group_by(DESIGNACAO,TIPOLOGIA,AnoT) %>% summa
 #%>% st_union(by_feature=T)
 
 saveRDS(CicloviasAnos, "CicloviasAnos/CicloviasAnos.Rds")
+#Falta deixar o ano original!!
 ```
 
 ## Processar as imagens para o gif
