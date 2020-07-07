@@ -14,6 +14,7 @@ library(units)
 CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
+addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
 
 
 #conteúdo das páginas
@@ -53,7 +54,8 @@ kilometros = column(2,
 ui = 
   fluidPage(
     navbarPage("Ciclovias em Lisboa",
-               tabPanel("Mapa",icon = icon("map"),
+    
+    tabPanel("Mapa",icon = icon("map"),
                 fluidRow(slider,
                          nada,
                          kilometros
@@ -62,13 +64,13 @@ ui =
                 tags$style(type = "text/css", "#map {height: calc(100vh - 190px) !important;}"), #mapa com a altura da janela do browser menos as barras de cima
                 leafletOutput(outputId = "map")
                                  ),
+               
    tabPanel("GIF",icon = icon("play-circle"),
             h2("Evolução da rede ciclável em Lisboa"),
             br(),
             fluidRow(column(8, offset = 3,
-            img(src="http://web.tecnico.ulisboa.pt/~rosamfelix/gis/contagens/RedeCiclavelLisboa2020.gif", align = "center",height="500px")
-            # img(src="pasta/RedeCiclavelLisboa2020.gif", align = "center",height="500px")
-                )) #alterar pelo path correcto!
+            img(src = "gif/RedeCiclavelLisboa2020.gif", align = "center",height="500px") 
+                ))
             ),
   
    tabPanel("Gráfico",icon = icon("chart-bar"),
