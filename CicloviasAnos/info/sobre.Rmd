@@ -1,0 +1,35 @@
+---
+title: "Sobre"
+author: "R Félix"
+output: html_document
+---
+
+
+#### A informação disponibilizada neste site não deve ser encarada como fonte de informação oficial  
+Esta dashboard pretende ser um exercício de recolha, tratamento e visualização de dados, utilizando software open-source (`R software`).  
+Esta App utiliza os seguintes packages: `shiny`, `sf`, `leaflet`, `dplyr`, `ggplot2`, `units`, `rmarkdown`.  
+
+  
+
+## Dados
+
+A informação sobre as ciclovias foi recolhida através do [portal de geodados da Câmara Municipal de Lisboa](http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0), que mantém esta base de dados actualizada com regularidade.  
+`última actualização: 03.Julho.2020`  
+  
+O **ano de construção** e **tipologias** foram depois acertadas, tal como desrito no código-fonte.
+São também apresentadas ciclovias que deixaram de existir ou que foram corrigidas, tais como:  
+* Campo Grande - Telheiras, anterior à construção do Estádio de Alvalade
+* Bici+BUS na Avenida da Liberdade, antes de passarem paras as laterais
+* Braço de Prata - Matinha, reformulação do traçado
+
+
+### Créditos
+
+Este site foi desenvolvido por [Rosa Félix](http://rosafelix.bike), investigadora na área da mobilidade ciclável no [U-Shift lab](https://ushift.tecnico.ulisboa.pt), do [CERIS](http://ceris.pt), no Instituto Superior Técnico - Universidade de Lisboa.
+
+### Algo está errado?
+
+_Falta alguma ciclovia? Há um troço mal classificado? A ciclovia não foi construída naquele ano?_  
+Deixa os teus comentários em <https://github.com/U-Shift/RedeCiclavel-Lisboa>  
+  
+Obrigada!

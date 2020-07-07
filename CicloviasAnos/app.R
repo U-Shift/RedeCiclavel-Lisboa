@@ -14,7 +14,8 @@ library(units)
 CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
-addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
+#addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
+addResourcePath(prefix = "gif", directoryPath = "D:/GIS/Ciclovias_CML/RedeCiclavel-Lisboa/CicloviasAnos/gif")
 
 
 #conteúdo das páginas
@@ -83,13 +84,12 @@ ui =
             ),
    
    tabPanel("Sobre",icon = icon("info"),
-            h2("texto com coisas"),
-            br(),
-            "texto com ainda mais coisas"),
+            includeMarkdown("info/sobre.Rmd")
+            ),
 
    tabPanel("Código",icon = icon("github"),
-            a(href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", "Link para o repositório"),  
-            br(),
+            h1(a("Repositório de código aberto", href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", target="_blank")),  
+            br(),br(),
             div("Se detectares erros indica aqui :)")
             )
         
