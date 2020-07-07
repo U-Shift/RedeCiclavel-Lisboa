@@ -13,6 +13,17 @@ CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
 
+
+#conteúdo das páginas
+## sobre
+
+## gif
+
+##codigo
+
+
+
+
 #conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                      min(CICLOVIAS$AnoT, na.rm = t),
@@ -26,9 +37,9 @@ slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:",
                       )             
                 )
 
-#nada = column(1, offset = 0, style="padding:0px;")
+nada = column(1, offset = 0, style="padding:0px;")
 
-kilometros = column(3, 
+kilometros = column(2, 
                     tags$h4("Extensão da rede"),
                     tags$h5(textOutput("kmsciclovias")),
                     tags$h5(textOutput("kmsoutras"))
@@ -42,21 +53,26 @@ kilometros = column(3,
 ui = 
   fluidPage(
     navbarPage("Ciclovias em Lisboa",
-               tabPanel("Mapa",
+               tabPanel("Mapa",icon = icon("map"),
                 fluidRow(slider,
-                       #  nada,
+                         nada,
                          kilometros
                          ),
   
                 tags$style(type = "text/css", "#map {height: calc(100vh - 190px) !important;}"), #mapa com a altura da janela do browser menos as barras de cima
                 leafletOutput(outputId = "map")
                                  ),
-   tabPanel("GIF",
+   tabPanel("GIF",icon = icon("play-circle"),
              h2("GIF animado da evolução da rede ciclável"),
              br(),
              "_work in progress_"),
   
-   tabPanel("Sobre",
+   tabPanel("Gráfico",icon = icon("chart-bar"),
+            h2("Extensão das ciclovias por ano"),
+            br(),
+            "_work in progress_"),
+   
+   tabPanel("Sobre",icon = icon("info"),
             h2("texto com coisas"),
             br(),
             "texto com ainda mais coisas"),
