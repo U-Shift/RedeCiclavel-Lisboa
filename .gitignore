@@ -35,7 +35,12 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 CicloviasAnos/credentials.Rds
+
 password.R
+
 .RData
 report.R
-GIS/GIS.Rproj
+
+
+
+/GIS
