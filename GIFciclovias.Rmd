@@ -1,0 +1,163 @@
+---
+title: "GIFciclovias"
+author: "R Félix"
+date: "8 de Julho de 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+#### Importar shapefile de Lisboa
+```{r eval=F, message=FALSE, warning=FALSE}
+#Limites de Lisboa
+# LisboaLimite2 = st_read("data/Lisboa_limite.gpkg")
+# LisboaLimite2 = LisboaLimite2[,c(3,5)] %>% st_transform(LisboaLimite2,  crs = 4326)
+# attr(LisboaLimite2, "sf_column") = "geometry"
+# colnames(LisboaLimite2)[colnames(LisboaLimite2)=="geom"] <- "geometry"
+# st_write(LisboaLimite2, "data/LisboaLimite.shp", append = F)
+LisboaLimite = st_read("data/LisboaLimite.shp")
+```
+#### Importar dados das ciclovias já processados
+
+
+## Processar as imagens para o gif
+
+#### criar elementos vazios nos anos em que nao aconteceu nada
+```{r}
+# vazios <-data.frame(TIPOLOGIA = as.character(NA),
+#                    lenght = 0,
+#                    Ano = as.integer(c(2002,2004,2006,2007,2015)))
+# vazios$AnoT <-vazios$Ano
+# vazios$geom<-st_sfc(st_multilinestring())
+# vazios<-st_sf(vazios, crs=4326)
+# vazios$lenght = units::set_units(vazios$lenght, km)
+# CicloviasGif = rbind(Ciclovias, vazios)
+```
+
+### Criar os GIF
+```{r include=FALSE}
+# Defenir estilo de mapa
+mapTheme <- function(base_size = 12) {
+  theme(
+    text = element_text( color = "black"),
+    plot.title = element_text(size = 18,colour = "black"),
+    plot.subtitle=element_text(face="italic"),
+    plot.caption=element_text(hjust=0),
+    axis.ticks = element_blank(),
+    panel.background = element_blank(),
+    #panel.grid.major = element_line("grey80", size = 0.1),
+    panel.grid.major = element_line(color = "transparent"),
+    strip.text = element_text(size=14,face = "bold"),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.background = element_rect(fill = "grey80", color = "white"),
+    plot.background = element_blank(),
+    legend.background = element_blank(),
+    legend.title = element_text(colour = "black", face = "italic"),
+    legend.text = element_text(colour = "black", face = "italic"))
+}
+```
+```{r include=FALSE}
+#theme para facets, com Ano mais pequeno
+mapThemeFacets <- function(base_size = 12) {
+  theme(
+    text = element_text( color = "black"),
+    plot.title = element_text(size = 18,colour = "black"),
+    plot.subtitle=element_text(face="italic"),
+    plot.caption=element_text(hjust=0),
+    axis.ticks = element_blank(),
+    panel.background = element_blank(),
+    #panel.grid.major = element_line("grey80", size = 0.1),
+    panel.grid.major = element_line(color = "transparent"),
+    strip.text = element_text(size=10,face = "bold"),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    strip.background = element_rect(fill = "grey80", color = "white"),
+    plot.background = element_blank(),
+    legend.background = element_blank(),
+    legend.title = element_text(colour = "black", face = "italic"),
+    legend.text = element_text(colour = "black", face = "italic"))
+}
+```
+
+
+```{r eval=FALSE, include=FALSE}
+#imagens em facet, em tons de cinza
+ggplot()+
+  geom_sf(data=LisboaLimite, aes(),color = NA)+
+  geom_sf(data=CicloviasAnos,aes(fill =AnoT),color="grey70",size=1,alpha=0.2,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2001),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2003),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2005),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2008),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2009),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2010),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2011),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2012),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2013),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2014),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2016),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2017),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2018),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2019),aes(),color="black",size=1.1,show.legend=F) +
+  geom_sf(data=filter(Ciclovias,Ano==2020),aes(),color="black",size=1.1,show.legend=F) +
+  
+  facet_wrap(~AnoT, nrow=2)+ geom_text(data=CicloviasKM,aes(x=-84000,y=-107000,label=Kms), inherit.aes=FALSE) + mapThemeFacets()
+
+```
+
+
+
+
+```{r}
+listaAnos = seq(1:20)+2000
+
+RedeCiclavelLxkm <- function(Year){
+  ggplot()+
+  geom_sf(data= LisboaLimite, aes(),color = NA) +
+  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia segregada" & AnoT==Year),
+          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
+  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==Year),
+          aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
+  geom_sf(data=subset(CicloviasGif,TIPOLOGIA=="Ciclovia segregada" & Ano==Year),aes(),
+          color="#1A7832",size=1.1,show.legend=F) +
+  geom_sf(data=subset(CicloviasGif,TIPOLOGIA=="Nao dedicada" & Ano==Year),aes(),
+          color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11
+  geom_text(data=subset(CicloviasKM,AnoT==Year),
+            aes(x=-84000,y=-107000,label=Kms), size=6,inherit.aes=FALSE) +
+  facet_wrap(~AnoT, nrow=1)+
+  mapTheme()
+
+  ggsave(filename=paste0("gif/",Year,"km.png"),
+         units="cm",width=20, height=18, dpi=400)
+}
+
+ listaAnos %>% map_df(RedeCiclavelLxkm)
+
+```
+```{r}
+#passa-se aqui qualquer coisa, às vezes dá, se for acrescentanto um a um, outras vezes não.
+limite = ggplot()+mapTheme()+geom_sf(LisboaLimite,mapping=aes(), color=NA)
+
+
+limite + geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia segregada"&AnoT==2020),
+                 color="#1A7832",size=0.9,show.legend=F, inherit.aes=T) +
+  geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==2020),aes(),
+          color="#AFD4A0",size=1,show.legend=F) +
+  geom_text(data=subset(CicloviasKM,AnoT==2020),
+           aes(x=-84000,y=-107000,label=Kms), size=6,inherit.aes=F) +
+  facet_wrap(~AnoT, nrow=1)
+
+
+  ggsave(filename=paste0("gif/",2022,"km.png"),
+         units="cm",width=20, height=18, dpi=400)
+```
+
+Usar um https://gifmaker.me com 1.5 seg de intervalo, por exemplo.

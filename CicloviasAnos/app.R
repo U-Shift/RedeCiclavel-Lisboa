@@ -6,7 +6,6 @@ library(leaflet)
 library(dplyr)
 library(ggplot2)
 library(units)
-#library(shinymanager)
 #library(htmltools)
 
 
@@ -14,19 +13,11 @@ library(units)
 CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
-#addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
-addResourcePath(prefix = "gif", directoryPath = "D:/GIS/Ciclovias_CML/RedeCiclavel-Lisboa/CicloviasAnos/gif")
+addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
 
 
-#conteúdo das páginas
 
-
-## sobre
-
-## codigo
-
-
-#conteúdo da parte de cima do mapa
+# conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                      min(CICLOVIAS$AnoT, na.rm = t),
                      max(CICLOVIAS$AnoT, na.rm = t),
@@ -90,6 +81,7 @@ ui =
    tabPanel("Código",icon = icon("github"),
             h1(a("Repositório de código aberto", href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", target="_blank")),  
             br(),br(),
+            div("Contribui para melhorar este site."),
             div("Se detectares erros indica aqui :)")
             )
         
@@ -112,7 +104,7 @@ server = function(input, output) {
                        options = layersControlOptions(collapsed = F))%>%
       hideGroup(c("Percurso Ciclo-pedonal")) %>% 
       addLegend(position = "bottomright", colors = c("#1A7832","#AFD4A0"), 
-                labels = c("Ciclovia segregada", "Segemento não dedicado"))
+                labels = c("Ciclovia dedicada", "Segemento não dedicado"))
       
       })
   
@@ -154,7 +146,7 @@ server = function(input, output) {
   
   #tabela dos quilómetros
   output$kmsciclovias <- renderText({
-    paste0("Ciclovias segregadas: ",
+    paste0("Ciclovias dedicadas: ",
       QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Ciclovia segregada"])
   })
   output$kmsoutras <- renderText({
