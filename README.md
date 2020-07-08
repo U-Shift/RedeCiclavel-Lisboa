@@ -1,7 +1,7 @@
 Rede Ciclável Liboa - Mapa animado
 ================
 
-Mapa animado com a evolução da rede ciclável em Lisboa desde 2001 </br></br>
+Mapa animado com a evolução da rede ciclável em Lisboa desde 2001 </br>
 
 A informação base está disponível no site de geodados da CML: <http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0>
 
@@ -103,7 +103,7 @@ ano2019 = c("B0000372_1133","B0000392_343","B0000391_377","4198_173","15403_90",
             "B0000393_944","B0000390_948")
 
 # listaAnos = c(2003,2005,2008,2009,2010,2011,2012,2013,2014,2015,2016,2018,2019)
-# for (i in listaAnos){CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano[i]] = i }
+# for (i in listaAnos){CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% paste0("ano",i)] = i }
 
 CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2003] = 2003
 CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2005] = 2005
@@ -304,10 +304,11 @@ sum(CicloviasAnos$lenght[CicloviasAnos$AnoT==2020]) #extensão da rede actual
 GIF com evolução
 ================
 
-Ver [código](), usando a informação processada aqui.
+[Ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/GIFciclovias.Rmd), usando a informação processada aqui.
 Resultado em [RedeCiclavelLisboa2020.gif](http://shiny.rosafelix.bike/ciclovias/gif/RedeCiclavelLisboa2020.gif)
 
 Mapa interactivo por anos
 =========================
 
-ver [código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/CicloviasAnos/app.R), usando a informação processada aqui. Resultado em [shiny.rosafelix.bike/ciclovias](http://shiny.rosafelix.bike/ciclovias)
+[ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/CicloviasAnos/app.R), usando a informação processada aqui.
+Resultado em [shiny.rosafelix.bike/ciclovias](http://shiny.rosafelix.bike/ciclovias)
