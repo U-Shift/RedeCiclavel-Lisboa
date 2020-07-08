@@ -36,10 +36,12 @@ library(cartography)
 ```{r}
 #actualizar para 2020 a partir do server da CML
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
-
+```
+```{r echo=TRUE, eval=FALSE}
 length(unique(CicloviasATUAL$OBJECTID)) #701
 length(unique(CicloviasATUAL$COD_SIG_TR)) #672
 ```
+
 ```{r include=FALSE}
 #st_write(CicloviasATUAL[,c(1,4,7,19)], "data/Ciclovias072020.shp", append=F) #data deste mês
 #saveRDS(CicloviasATUAL, "data/CicloviasNOVO072020.Rds") #data deste mês
