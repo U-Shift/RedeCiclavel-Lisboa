@@ -43,15 +43,8 @@ CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9
 
 ``` r
 length(unique(CicloviasATUAL$OBJECTID)) #701
-```
-
-    ## [1] 701
-
-``` r
 length(unique(CicloviasATUAL$COD_SIG_TR)) #672
 ```
-
-    ## [1] 672
 
 Adicionar campo de `ID único`, *enquanto a BD oficial não tiver um*.
 
@@ -219,9 +212,11 @@ greens3 = rev(greens3)
 mapview(Ciclovias, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-13-1.png)
 
 ### Criar tabelas para cada ano
+
+Que inclui as que existiam no ano anterior
 
 ``` r
 Ciclovias$AnoT = Ciclovias$ANO
@@ -258,7 +253,7 @@ Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="157090_93" & Ciclovias
 #É reformulada a do Campo Grande e desaparece um troço
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4011 & Ciclovias2020T$AnoT>=2017),]
 #desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2018),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2018),] #verificar porque é que ela só aparece em 2018 a não dedicada
 #é reformulada uma ciclovia na estrada da pontinha
 ```
 
@@ -269,7 +264,7 @@ cic20=Ciclovias2020T[Ciclovias2020T$AnoT==2020,]
 mapview(cic20, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-15-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-16-1.png)
 
 ### Adicionar contador de km
 

@@ -101,7 +101,7 @@ ano2012 = c("B0000266_43","B0000265_82","B0000028_905","B0000188_512","B0000037_
 ano2013 = c("18320_426","159178_211","159044_12","158526_223","159033_430","159043_221","159023_7",
             "159031_608","159021_268","159179_12","159022_11")
 ano2014 = c("B0000045_722","B0000140_43","15102_41","2607_65","14168_57","B0000367_401")
-ano2015 = c("5777_373","5684_84","B0000215_22","5593_48","B0000243_41")
+ano2015 = c("5777_373","5684_84","B0000215_22","5593_48","B0000243_41", "B0000057_287", "B0000038_533", "B0000183_184", "B0000240_458")
 ano2016 = c("18155_126","17340_64","158357_62","18153_140","17343_181","18029_76","B0000077_31","18031_81")
 ano2018 = c("B0000373_662")
 ano2019 = c("B0000372_1133","B0000392_343","B0000391_377","4198_173","15403_90","153668_146","4128_191",
@@ -207,6 +207,7 @@ mapview(Ciclovias, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
 ### Criar tabelas para cada ano
+Que inclui as que existiam no ano anterior
 ```{r}
 Ciclovias$AnoT = Ciclovias$ANO
 
@@ -241,7 +242,7 @@ Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="157090_93" & Ciclovias
 #É reformulada a do Campo Grande e desaparece um troço
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4011 & Ciclovias2020T$AnoT>=2017),]
 #desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2018),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2017),]
 #é reformulada uma ciclovia na estrada da pontinha
 ```
 
