@@ -114,7 +114,7 @@ server = function(input, output) {
       addMapPane("abaixo", zIndex = 200) %>% # shown below
       addMapPane("acima", zIndex = 300) %>% # shown above
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
-                                      CICLOVIAS$TIPOLOGIA == "Ciclovia segregada", ],
+                                      CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada", ],
                    color = "#1A7832",
                    weight = 3,
                    opacity = 1,
@@ -147,7 +147,7 @@ server = function(input, output) {
   #tabela dos quilómetros
   output$kmsciclovias <- renderText({
     paste0("Ciclovias dedicadas: ",
-      QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Ciclovia segregada"])
+      QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Ciclovia dedicada"])
   })
   output$kmsoutras <- renderText({
     paste0("30+Bici ou Não dedicada: ",
@@ -157,7 +157,7 @@ server = function(input, output) {
   #gráfico
   output$grafico <- renderPlot({
    ggplot(QUILOMETROS[QUILOMETROS$TIPOLOGIA!="Percurso Ciclo-pedonal",],
-          aes(factor(AnoT), drop_units(lenght), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia segregada")))
+          aes(factor(AnoT), drop_units(lenght), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia dedicada")))
           ) +
       geom_bar(stat="identity") +
       scale_fill_manual(values= c("#AFD4A0","#1A7832"), "Tipologia: ") +
