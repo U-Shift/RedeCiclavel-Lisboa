@@ -14,7 +14,7 @@ library(units)
 CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
-addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
+#addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
 
 
 
@@ -78,13 +78,26 @@ ui =
    tabPanel("Sobre",icon = icon("info"),
             includeMarkdown("info/sobre.Rmd")
             ),
+   
+   navbarMenu("Código",icon = icon("github"),
+          
+              tabPanel("Processamento dos dados",
+                       includeMarkdown("info/preparacao.Rmd")
+                      ),
+              
+              tabPanel("GIF animado",
+                       includeMarkdown("info/sobre.Rmd") #substituir por GIFciclovias.Rmd
+                      ),
+              
+              tabPanel("Github",
+                      h1(a("Repositório de código aberto", href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", target="_blank")),  
+                      br(),br(),
+                      div("Contribui para melhorar este site."),
+                      div("Se detectares erros indica aqui :)")
+                     )
+              )
 
-   tabPanel("Código",icon = icon("github"),
-            h1(a("Repositório de código aberto", href = "https://github.com/U-Shift/RedeCiclavel-Lisboa", target="_blank")),  
-            br(),br(),
-            div("Contribui para melhorar este site."),
-            div("Se detectares erros indica aqui :)")
-            )
+
         
     ) #fecha o navbar 
 ) #fecha a estrutura do ui
