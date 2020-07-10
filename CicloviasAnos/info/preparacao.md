@@ -1,4 +1,5 @@
 ---
+title: "Processamento dos dados"
 output:
   html_document:
     toc: true
@@ -6,11 +7,11 @@ output:
       collapsed: false
     keep_md: true
     highlight: haddock
+#runtime: shiny
 ---
 
 
 
-# Processamento dos dados
 ## Importação dos dados
 #### Importar packages R
 

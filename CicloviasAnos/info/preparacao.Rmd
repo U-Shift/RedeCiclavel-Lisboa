@@ -6,12 +6,13 @@ output:
     toc_float:
       collapsed: false
     keep_md: true
-#    highlight: haddock
+#   highlight: haddock
 #runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(rmarkdown)
 ```
 
 ## Importação dos dados
