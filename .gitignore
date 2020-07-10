@@ -46,3 +46,9 @@ report.R
 /GIS
 
 CicloviasVELHO062020.shx
+CicloviasAnos/CicloviasAnosVELHO.Rds
+data/Ciclovias2020Julho.gpkg
+data/CicloviasCORRECT.dbf
+data/CicloviasCORRECT.shp
+data/CicloviasCORRECT.shx
+GIS/Ciclovias.qgz
