@@ -5,6 +5,7 @@ library(sf)
 library(leaflet)
 library(dplyr)
 library(ggplot2)
+library(plotly)
 library(units)
 #library(htmltools)
 
@@ -70,7 +71,7 @@ ui =
             br(),
             fluidRow(column(8, offset = 2,
                  tags$style(type = "text/css", "#grafico {height: calc(100vh - 200px) !important;}"), #altura responsive
-                 plotOutput("grafico")
+                 plotlyOutput("grafico")
             ))
             ),
    
@@ -155,22 +156,27 @@ server = function(input, output) {
   })
   
   #gráfico
-  output$grafico <- renderPlot({
-   ggplot(QUILOMETROS[QUILOMETROS$TIPOLOGIA!="Percurso Ciclo-pedonal",],
+  grafico = ggplot(QUILOMETROS[QUILOMETROS$TIPOLOGIA!="Percurso Ciclo-pedonal" & QUILOMETROS$Kms!="0 km",],
           aes(factor(AnoT), drop_units(lenght), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia dedicada")))
           ) +
       geom_bar(stat="identity") +
+      guides(fill=guide_legend(reverse=TRUE), colour=guide_legend(reverse=TRUE)) +
       scale_fill_manual(values= c("#AFD4A0","#1A7832"), "Tipologia: ") +
       scale_y_continuous(breaks = seq(0,100,20)) +
       theme_minimal() +
       theme(axis.text.x = element_text(angle=90, vjust = 0.5),
-            text = element_text(size = 16),
-            legend.position="bottom") +
+            text = element_text(size = 16))+
     labs(x="Ano",
          y="Extensão [km]"
          # title="Extensão da rede ciclável",
          # subtitle="Comprimento da rede ciclável em Lisboa, acumulado por ano"
          )
+  grafico = ggplotly(grafico)  %>%
+    layout(legend = list(orientation = "h", y=1.1, x=0.05,  traceorder = "reversed"),
+           hovermode = "x") %>% #para aparecer legenda logo em ambos
+    style(hoverinfo = "y")
+  output$grafico <- renderPlotly({grafico
+   
     })
   
 }
