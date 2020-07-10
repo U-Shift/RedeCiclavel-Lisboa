@@ -1,22 +1,20 @@
 ---
-title: "Processamento dos dados"
 output:
   html_document:
     toc: true
     toc_float:
       collapsed: false
     keep_md: true
-#    highlight: haddock
-#runtime: shiny
+    highlight: haddock
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
+
+# Processamento dos dados
 ## Importação dos dados
 #### Importar packages R
-```{r eval=FALSE}
+
+```r
 library(tidyverse)
 library(sf)
 library(mapview)
@@ -26,17 +24,20 @@ library(cartography)
 
 #### Importar rede ciclável
 Download da informação geoffererenciada a partir do servidor da CML: http://geodados.cm-lisboa.pt/datasets/440b7424a6284e0b9bf11179b95bf8d1_0
-```{r eval=FALSE}
+
+```r
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
 ```
-```{r eval=FALSE}
+
+```r
 length(unique(CicloviasATUAL$OBJECTID)) #701
 length(unique(CicloviasATUAL$COD_SIG_TR)) #672
 ```
 
 
 Adicionar campo de `ID único`, _enquanto a BD oficial não tiver um_.
-```{r eval=FALSE}
+
+```r
 CicloviasCORRECT = CicloviasATUAL[,c(2,4,7,19,28)]
 
 CicloviasCORRECT$IDunico = paste(CicloviasCORRECT$COD_SIG_TR, round(CicloviasCORRECT$Shape__Length), sep = "_" )
@@ -48,7 +49,8 @@ Agora temos um campo único para cada segmento.
 
 ## Corrigir dados
 #### Remover os que estão a mais
-```{r eval=FALSE}
+
+```r
 #Remover os que estão a mais
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$IDunico %in% c("157090_170","157090_248","157090_101","157090_93")),] #av ribeira das naus
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$IDunico %in% c("A000006_1650","B0000282_137")),] #campo grande em toda a extenção > ver se é preciso também o "A000006_76"
@@ -57,7 +59,8 @@ CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$IDunico == "B0000396_2741
 CicloviasCORRECT = CicloviasCORRECT[!(CicloviasCORRECT$IDunico %in% c("1260_49","1276_49","1287_48","1301_36" )),]  #rio zezere
 ```
 #### Adicionar segmentos que foram entretanto destruídos, a partir de uma shapefile antiga
-```{r eval=FALSE}
+
+```r
 ADICIONAR = st_read("data/Adicionar.shp")
 ADICIONAR = st_transform(ADICIONAR, st_crs(CicloviasCORRECT))
 ADICIONAR$IDunico = as.character(as.integer(rownames(ADICIONAR))+4000)
@@ -70,7 +73,8 @@ rm(ADICIONAR,ADICIONARA,CicloviasA)
 
 
 #### Acertar anos de construção
-```{r eval=FALSE}
+
+```r
 CicloviasCORRECT$ANO = as.integer(as.character(CicloviasCORRECT$ANO))
 
 ano2003 = c("6708_2658")
@@ -116,7 +120,8 @@ CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2019] = 2019
 
 #### Reclassificar ciclovias
 Em __dedicadas__ (uni e bi-direccionais, pistas cicláveis) e __não-dedicadas__ (30+bici, zona de coexistência), e __percursos em coexistência com o peão__ (ciclo-pedonal)
-```{r eval=FALSE}
+
+```r
 CicloviasCORRECT$TIPOLOGIA = as.character(CicloviasCORRECT$TIPOLOGIA)
 table(CicloviasCORRECT$TIPOLOGIA)
 CicloviasCORRECT$TIPOLOGIA[CicloviasCORRECT$TIPOLOGIA=="Ciclovia segregada"] = "Ciclovia dedicada"
@@ -151,7 +156,8 @@ table(CicloviasCORRECT$TIPOLOGIA)
 ```
 
 #### Acertar nomes
-```{r eval=FALSE}
+
+```r
 #Nomes
 CicloviasCORRECT$DESIGNACAO = as.character(CicloviasCORRECT$DESIGNACAO)
 CicloviasCORRECT$DESIGNACAO[CicloviasCORRECT$DESIGNACAO=="---- Campo Grande"] = "Campo Grande"
@@ -160,7 +166,8 @@ CicloviasCORRECT$DESIGNACAO[CicloviasCORRECT$DESIGNACAO=="---- Eixo Central"] = 
 
 
 ##### Acertar geometria
-```{r eval=FALSE}
+
+```r
 #renomear
 Ciclovias = CicloviasCORRECT
 Ciclovias$TIPOLOGIA = factor(Ciclovias$TIPOLOGIA)
@@ -173,14 +180,16 @@ sum(Ciclovias$lenght)
 
 ### Ver num mapa
 Todas as ciclovias que existem ou existiram
-```{r eval=FALSE}
+
+```r
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
 ```
 ![](figs/todas.png)
 
 ### Criar tabelas para cada ano
 Que inclui as que existiam no ano anterior
-```{r eval=FALSE}
+
+```r
 Ciclovias$AnoT = Ciclovias$ANO
 
 Cic <- lapply(2001:2020, function(i) {
@@ -199,7 +208,8 @@ for (i in 1:length(Cic)){
 ```
 
 Remover as ciclovias que foram destruídas
-```{r eval=FALSE}
+
+```r
 #remover corte do campo grande: construção do estádio Alvalade em 2003/2004
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4015 & Ciclovias2020T$AnoT>=2003),]
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4014 & Ciclovias2020T$AnoT>=2003),]
@@ -219,7 +229,8 @@ Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$A
 ```
 
 Confirmar mapa actual
-```{r eval=FALSE}
+
+```r
 cic20=Ciclovias2020T[Ciclovias2020T$AnoT==2020,]
 greens3 = cartography::carto.pal(pal1 = "green.pal", 3)
 greens3 = rev(greens3)
@@ -228,7 +239,8 @@ mapview(cic20, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ![](figs/tipologia20.png)
 
 ### Adicionar contador de km
-```{r eval=FALSE}
+
+```r
 #Adicionar campo com extensão da rede acumulada
 CicloviasKM = Ciclovias2020T[,c(3,5,6)]
 st_geometry(CicloviasKM) = NULL
@@ -244,7 +256,8 @@ CicloviasKM$Kms <- paste(round(CicloviasKM$lenght,digits = 0),"km", sep=" ")
 
 ### Agrupar features
 Porque senão ficava muito lento
-```{r eval=FALSE}
+
+```r
 CicloviasAnos = Ciclovias2020T %>% 
   group_by(DESIGNACAO,TIPOLOGIA,AnoT,ANO) %>% summarise() %>% ungroup()
 
@@ -254,7 +267,8 @@ sum(CicloviasAnos$lenght[CicloviasAnos$AnoT==2020]) #extensão da rede actual
 
 ## Guardar ficheiros
 Na pasta da app
-```{r eval=FALSE}
+
+```r
 saveRDS(CicloviasAnos, "app_path/CicloviasAnos.Rds")
 saveRDS(CicloviasKM, "app_path/CicloviasKM.Rds")
 ```

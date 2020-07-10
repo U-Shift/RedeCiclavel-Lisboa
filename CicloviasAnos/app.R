@@ -7,6 +7,8 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(units)
+#library(knitr)
+#library(markdown)
 #library(htmltools)
 
 
@@ -41,11 +43,18 @@ kilometros = column(2,
                     )
 
 
+
 # Define UI for application that draws a map
 # estrutura da página
 
 ui = 
   fluidPage(
+    tags$head(
+      tags$script(src = 'highlight.pack.js'),
+      tags$script(src = 'shiny-showcase.js'),
+      tags$link(rel = "stylesheet", type = "text/css", href = "rstudio.css")
+    ),
+    
     navbarPage("Ciclovias em Lisboa",
     
     tabPanel("Mapa",icon = icon("map"),
@@ -82,7 +91,7 @@ ui =
    navbarMenu("Código",icon = icon("github"),
           
               tabPanel("Processamento dos dados",
-                       includeMarkdown("info/preparacao.Rmd")
+                       includeMarkdown("info/preparacao.md")
                       ),
               
               tabPanel("GIF animado",
