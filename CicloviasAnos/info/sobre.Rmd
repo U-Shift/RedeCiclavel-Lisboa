@@ -7,7 +7,7 @@ output: html_document
 
 #### A informação disponibilizada neste site não deve ser encarada como fonte de informação oficial  
 Esta dashboard pretende ser um exercício de recolha, tratamento e visualização de dados, utilizando software open-source (`R software`).  
-Esta App utiliza os seguintes packages: `shiny`, `sf`, `leaflet`, `dplyr`, `ggplot2`, `units`, `rmarkdown`.  
+Esta App utiliza os seguintes packages: `shiny`, `sf`, `leaflet`, `dplyr`, `ggplot2`, `plotly`, `units`, `rmarkdown`.  
 
   
 
@@ -30,6 +30,6 @@ Este site foi desenvolvido por [Rosa Félix](http://rosafelix.bike), investigado
 ### Algo está errado?
 
 _Falta alguma ciclovia? Há um troço mal classificado? A ciclovia não foi construída naquele ano?_  
-Deixa os teus comentários em <https://github.com/U-Shift/RedeCiclavel-Lisboa>  
+Deixa os teus comentários em <https://github.com/U-Shift/RedeCiclavel-Lisboa/issues>  
   
 Obrigada!
