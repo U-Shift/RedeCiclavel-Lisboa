@@ -7,7 +7,7 @@ output:
       collapsed: false
     keep_md: true
 #   highlight: haddock
-#runtime: shiny
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -176,7 +176,7 @@ sum(Ciclovias$lenght)
 ```
 
 ### Ver num mapa
-Todas as ciclovias que existem ou existiram
+Todas as ciclovias que existem ou existiram no server da CML
 ```{r eval=FALSE}
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
 ```

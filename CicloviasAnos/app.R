@@ -7,8 +7,8 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(units)
+library(rmarkdown)
 #library(knitr)
-#library(markdown)
 #library(htmltools)
 
 
@@ -16,9 +16,8 @@ library(units)
 CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
-#addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
-
-
+addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
+# addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/info")
 
 # conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
@@ -91,6 +90,7 @@ ui =
    navbarMenu("Código",icon = icon("github"),
           
               tabPanel("Processamento dos dados",
+                     #  uiOutput("preparacao")
                        includeMarkdown("info/preparacao.md")
                       ),
               
@@ -201,6 +201,13 @@ server = function(input, output) {
    
     })
   
+  # #markdown dos códigos
+  # output$preparacao <- renderUI({ 
+  #   rmarkdown::render(input = "preparacao.Rmd",
+  #                     output_format = html_document(self_contained = TRUE),
+  #                     output_file = "preparacao.html")
+  #   shiny::includeHTML("preparacao.html")
+  #   }) #the directory "info" does not exist
 }
 
 
