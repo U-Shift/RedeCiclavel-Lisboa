@@ -34,13 +34,6 @@ library(cartography)
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
 ```
 
-    ## Reading layer `Ciclovias' from data source `https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson' using driver `GeoJSON'
-    ## Simple feature collection with 701 features and 28 fields
-    ## geometry type:  LINESTRING
-    ## dimension:      XY
-    ## bbox:           xmin: -9.228815 ymin: 38.69188 xmax: -9.090616 ymax: 38.7956
-    ## geographic CRS: WGS 84
-
 ``` r
 length(unique(CicloviasATUAL$OBJECTID)) #701
 length(unique(CicloviasATUAL$COD_SIG_TR)) #672
@@ -70,12 +63,13 @@ Corrigir dados
 ``` r
 CicloviasCORRECT$ANO = as.integer(as.character(CicloviasCORRECT$ANO))
 
+ano2001 = c("B0000371_346")
 ano2003 = c("6708_2658")
 ano2005 = c("B0000204_1518","B0000080_2058","B0000205_350")
-ano2008 = c("B0000025_90","B0000023_1372")
+ano2008 = c("B0000025_90","B0000173_248","B0000085_140")
 ano2009 = c("B0000224_358","A000002_536","B0000015_1191","B0000012_814","B0000138_705","B0000144_805",
-            "B0000237_302","B0000145_188","B0000225_513","B0000132_975","B0000205_1090","B0000023_1372",
-            "B0000085_140","B0000174_231","B0000371_346","B0000024_393","B0000210_237","B0000081_129",
+            "B0000237_302","B0000145_188","B0000225_513","B0000132_975","B0000205_1090",
+            "B0000174_231","B0000024_393","B0000210_237","B0000081_129",
             "B0000028_905","B0000010_907","B0000011_234","B0000214_500","B0000013_206","B0000212_96",
             "A000008_1278","B0000216_487","B0000009_159","B0000202_21","B0000184_575","A000007_758")
 ano2010 = c("B0000036_446","B0000026_174","14296_338","A000019_853","152515_106","B0000006_197","12211_98",
@@ -88,16 +82,17 @@ ano2012 = c("B0000266_43","B0000265_82","B0000028_905","B0000188_512","B0000037_
 ano2013 = c("18320_426","159178_211","159044_12","158526_223","159033_430","159043_221","159023_7",
             "159031_608","159021_268","159179_12","159022_11")
 ano2014 = c("B0000045_722","B0000140_43","15102_41","2607_65","14168_57","B0000367_401")
-ano2015 = c("5777_373","5684_84","B0000215_22","5593_48","B0000243_41")
+ano2015 = c("5777_373","5684_84","B0000215_22","5593_48","B0000243_41", "B0000057_287", "B0000038_533", "B0000183_184", "B0000240_458")
 ano2016 = c("18155_126","17340_64","158357_62","18153_140","17343_181","18029_76","B0000077_31","18031_81")
 ano2018 = c("B0000373_662")
 ano2019 = c("B0000372_1133","B0000392_343","B0000391_377","4198_173","15403_90","153668_146","4128_191",
             "4671_198","156600_67","4614_226","4198_159","B0000325_61","B0000325_111","15403_3","15620_190",
             "B0000393_944","B0000390_948")
 
-# listaAnos = c(2003,2005,2008,2009,2010,2011,2012,2013,2014,2015,2016,2018,2019)
+# listaAnos = c(2001,2003,2005,2008,2009,2010,2011,2012,2013,2014,2015,2016,2018,2019)
 # for (i in listaAnos){CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% paste0("ano",i)] = i }
 
+CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2001] = 2001
 CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2003] = 2003
 CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2005] = 2005
 CicloviasCORRECT$ANO[CicloviasCORRECT$IDunico %in% ano2008] = 2008
@@ -128,9 +123,9 @@ table(CicloviasCORRECT$TIPOLOGIA)
     ## Faixas Cicláveis ou Contrafluxos           Percurso Ciclo-pedonal 
     ##                               18                               97 
     ##      Pista Ciclavel Bidirecional      Pista Ciclável Bidirecional 
-    ##                               13                              247 
+    ##                               14                              249 
     ##  Pistas Cicláveis Unidirecionais                           Trilho 
-    ##                               68                               57 
+    ##                               70                               57 
     ##             Zona de Coexistencia             Zona de Coexistência 
     ##                                2                                3
 
@@ -168,7 +163,7 @@ table(CicloviasCORRECT$TIPOLOGIA)
 
     ## 
     ##      Ciclovia dedicada           Nao dedicada Percurso Ciclo-pedonal 
-    ##                    372                    211                     73
+    ##                    377                    211                     73
 
 ``` r
 #confirmar
@@ -196,7 +191,7 @@ Ciclovias$lenght = st_length(Ciclovias) %>% units::set_units(km)
 sum(Ciclovias$lenght)
 ```
 
-    ## 118.6972 [km]
+    ## 120.9386 [km]
 
 ``` r
 # calma, há segmentos que foram destruídos entretanto
@@ -212,7 +207,7 @@ greens3 = rev(greens3)
 mapview(Ciclovias, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-13-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-14-1.png)
 
 ### Criar tabelas para cada ano
 
@@ -242,7 +237,6 @@ Remover as ciclovias que foram destruídas
 #remover corte do campo grande: construção do estádio Alvalade em 2003/2004
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4015 & Ciclovias2020T$AnoT>=2003),]
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4014 & Ciclovias2020T$AnoT>=2003),]
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4018 & Ciclovias2020T$AnoT>=2003),]
 #substituiçao do bici+BUS da avenida da liberdade pelas laterais
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4010 & Ciclovias2020T$AnoT>=2013),]
 #Desaparece o encerramento da Av Ribeira das Naus ao transito
@@ -253,7 +247,7 @@ Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="157090_93" & Ciclovias
 #É reformulada a do Campo Grande e desaparece um troço
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4011 & Ciclovias2020T$AnoT>=2017),]
 #desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
-Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2018),] #verificar porque é que ela só aparece em 2018 a não dedicada
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2017),]
 #é reformulada uma ciclovia na estrada da pontinha
 ```
 
@@ -264,7 +258,7 @@ cic20=Ciclovias2020T[Ciclovias2020T$AnoT==2020,]
 mapview(cic20, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
 
-![](README_files/figure-markdown_github/unnamed-chunk-16-1.png)
+![](README_files/figure-markdown_github/unnamed-chunk-17-1.png)
 
 ### Adicionar contador de km
 
@@ -294,7 +288,7 @@ CicloviasAnos$lenght = st_length(CicloviasAnos) %>% units::set_units(km)
 sum(CicloviasAnos$lenght[CicloviasAnos$AnoT==2020]) #extensão da rede actual
 ```
 
-    ## 108.1993 [km]
+    ## 111.101 [km]
 
 GIF com evolução
 ================

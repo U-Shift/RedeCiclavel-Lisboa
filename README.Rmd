@@ -37,6 +37,10 @@ library(cartography)
 #actualizar para 2020 a partir do server da CML
 CicloviasATUAL = st_read("https://opendata.arcgis.com/datasets/440b7424a6284e0b9bf11179b95bf8d1_0.geojson") 
 ```
+```{r include=FALSE}
+CicloviasATUAL = readRDS("data/Ciclovias701.Rds") #remover quando estiverem novamente 701 ou mais no servidor
+```
+
 ```{r echo=TRUE, eval=FALSE}
 length(unique(CicloviasATUAL$OBJECTID)) #701
 length(unique(CicloviasATUAL$COD_SIG_TR)) #672
