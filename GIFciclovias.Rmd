@@ -139,7 +139,7 @@ RedeCiclavelLxkm <- function(Year){
   mapTheme()
 
   ggsave(filename=paste0("GIF/exemp/",Year,"km.png"),
-         units="cm",width=20, height=18, dpi=400)
+         units="cm",width=10, height=9, dpi=300)
 }
 
  listaAnos %>% map_df(RedeCiclavelLxkm)
@@ -150,7 +150,7 @@ RedeCiclavelLxkm <- function(Year){
 limite = ggplot()+mapTheme()+geom_sf(LisboaLimite,mapping=aes(), color=NA)
 
 
-limite + geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia dedicada"&AnoT==2020),
+limite + geom_sf(data=subset(CICLOVIAS,TIPOLOGIA=="Ciclovia dedicada"&AnoT==2020),
                  color="#1A7832",size=0.9,show.legend=F, inherit.aes=T) +
   geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Nao dedicada" & AnoT==2020),aes(),
           color="#AFD4A0",size=1,show.legend=F) +
@@ -160,7 +160,7 @@ limite + geom_sf(data=subset(CicloviasAnos,TIPOLOGIA=="Ciclovia dedicada"&AnoT==
 
 
   ggsave(filename=paste0("gif/",2022,"km.png"),
-         units="cm",width=20, height=18, dpi=400)
+         units="cm",width=10, height=9, dpi=400)
 ```
 
 Usar um https://gifmaker.me com 1.5 seg de intervalo, por exemplo.
