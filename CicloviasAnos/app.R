@@ -8,7 +8,7 @@ library(ggplot2)
 library(plotly)
 library(units)
 library(rmarkdown)
-#library(knitr)
+library(knitr)
 #library(htmltools)
 
 
@@ -17,7 +17,7 @@ CICLOVIAS = readRDS("CicloviasAnos.Rds") #rede
 QUILOMETROS = readRDS("CicloviasKM.Rds") #extensão
 
 addResourcePath(prefix = "gif", directoryPath = "/srv/shiny-server/ciclovias/gif")
-# addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/info")
+addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/info")
 
 # conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
@@ -41,7 +41,11 @@ kilometros = column(2,
                     #converter para tabela?
                     )
 
-
+#criar o rmd
+# rmarkdown::render(input = "info/preparacao.Rmd",
+#                   output_format = "html_document",
+#                   output_file = "/srv/shiny-server/ciclovias/info/preparacao.html")
+# xml2::write_html(rvest::html_node(xml2::read_html("/srv/shiny-server/ciclovias/info/preparacao.html"), "body"), file = "/srv/shiny-server/ciclovias/info/preparacao2.html")
 
 # Define UI for application that draws a map
 # estrutura da página
@@ -91,7 +95,8 @@ ui =
           
               tabPanel("Processamento dos dados",
                      #  uiOutput("preparacao")
-                       includeMarkdown("info/preparacao.md")
+                       includeMarkdown("info/preparacao.Rmd")
+                     # includeHTML("info/preparacao2.html")
                       ),
               
               tabPanel("GIF animado",
@@ -201,13 +206,10 @@ server = function(input, output) {
    
     })
   
-  # #markdown dos códigos
-  # output$preparacao <- renderUI({ 
-  #   rmarkdown::render(input = "preparacao.Rmd",
-  #                     output_format = html_document(self_contained = TRUE),
-  #                     output_file = "preparacao.html")
-  #   shiny::includeHTML("preparacao.html")
-  #   }) #the directory "info" does not exist
+  #markdown dos códigos
+  # output$preparacao <- renderUI({
+  #   shiny::renderUI(includeHTML("/srv/shiny-server/ciclovias/info/preparacao2.html"))
+  #   })
 }
 
 

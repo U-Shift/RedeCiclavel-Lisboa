@@ -1,12 +1,12 @@
 ---
 title: "Processamento dos dados"
 output:
-  html_document:
-    toc: true
-    toc_float:
-      collapsed: false
+  html_fragment:
+    # highlight: haddock
+    # toc: true
+    # toc_float:
+    #   collapsed: false
     keep_md: true
-#   highlight: haddock
 #runtime: shiny
 ---
 
@@ -183,7 +183,7 @@ sum(Ciclovias$lenght)
 ```
 
 ### Ver num mapa
-Todas as ciclovias que existem ou existiram
+Todas as ciclovias que existem ou existiram no server da CML
 
 ```r
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
