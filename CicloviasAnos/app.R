@@ -75,6 +75,7 @@ ui =
             br(),
             fluidRow(column(8, offset = 3,
             img(src = "gif/RedeCiclavelLisboa2020.gif", align = "center",height="500px") 
+            #tags$video(src = "gif/RedeCiclavelLisboa2020.mp4", align = "center",height="500px")
                 ))
             ),
   
@@ -100,7 +101,7 @@ ui =
                       ),
               
               tabPanel("GIF animado",
-                       includeMarkdown("info/sobre.Rmd") #substituir por GIFciclovias.Rmd
+                       includeMarkdown("info/GIFciclovias.Rmd")
                       ),
               
               tabPanel("Github",
