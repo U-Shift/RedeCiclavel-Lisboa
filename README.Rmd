@@ -250,6 +250,8 @@ Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="157090_93" & Ciclovias
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4011 & Ciclovias2020T$AnoT>=2017),]
 #desaparece a zona coexist junto ao rio no braço de prata, e é criada uma ciclovia
 Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico==4006 & Ciclovias2020T$AnoT>=2017),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="18800_173" & Ciclovias2020T$AnoT>=2017),]
+Ciclovias2020T =Ciclovias2020T[!(Ciclovias2020T$IDunico=="B0000031_186" & Ciclovias2020T$AnoT>=2017),]
 #é reformulada uma ciclovia na estrada da pontinha
 ```
 
