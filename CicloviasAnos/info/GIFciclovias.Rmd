@@ -102,15 +102,15 @@ RedeCiclavelLxkm <- function(Year){
     #mapa base
     geom_sf(LisboaLimite, mapping = aes(), color = NA) +
     #rede existente no ano anterior
-    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==Year),
-          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
     geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Nao dedicada" & AnoT==Year),
           aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
+    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==Year),
+          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
     #novas ciclovias naquele ano
-    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==Year),aes(),
-          color="#1A7832",size=1.1,show.legend=F) +
     geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Nao dedicada" & ANO==Year),aes(),
           color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11 para tracejado
+    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==Year),aes(),
+          color="#1A7832",size=1.1,show.legend=F) +
     #aplicar o estilo com o ano em cima
     facet_wrap(~AnoT, nrow=1)+
     #adicionar o contador de km
