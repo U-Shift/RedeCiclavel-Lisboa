@@ -23,11 +23,11 @@ addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/in
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                      min(CICLOVIAS$AnoT, na.rm = t),
                      max(CICLOVIAS$AnoT, na.rm = t),
-                     selected = "2010",
-                     choices = as.character(seq(2001,2020)),
+                     selected = "2011",
+                     choices = as.character(seq(2001,2022)),
                    # sep = "",
                    # grid = T,
-                     animate = animationOptions(interval = 2000),
+                     animate = animationOptions(interval = 2002),
                      width = "100%"
                       )             
                 )
@@ -74,7 +74,7 @@ ui =
             h2("Evolução da rede ciclável em Lisboa"),
             br(),
             fluidRow(column(8, offset = 3,
-            img(src = "gif/RedeCiclavelLisboa2020.gif", align = "center",height="500px") 
+            img(src = "gif/RedeCiclavelLisboa2022.gif", align = "center",height="500px") 
             #tags$video(src = "gif/RedeCiclavelLisboa2020.mp4", align = "center",height="500px")
                 ))
             ),
@@ -190,7 +190,7 @@ server = function(input, output) {
       geom_bar(stat="identity") +
       guides(fill=guide_legend(reverse=TRUE), colour=guide_legend(reverse=TRUE)) +
       scale_fill_manual(values= c("#AFD4A0","#1A7832"), "Tipologia: ") +
-      scale_y_continuous(breaks = seq(0,100,20)) +
+      scale_y_continuous(breaks = seq(0,160,20)) +
       theme_minimal() +
       theme(axis.text.x = element_text(angle=90, vjust = 0.5),
             text = element_text(size = 16))+

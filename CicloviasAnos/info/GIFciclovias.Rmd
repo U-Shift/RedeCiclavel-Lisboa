@@ -46,7 +46,7 @@ vazios <-data.frame(DESIGNACAO = as.character(NA),
                    TIPOLOGIA = as.character(NA),
                    AnoT = as.integer(c(2002,2004,2006,2007,2015)))
 vazios$ANO <-vazios$AnoT
-vazios$geometry<-st_sfc(st_multilinestring())
+vazios$geom<-st_sfc(st_multilinestring())
 vazios<-st_sf(vazios, crs=4326)
 vazios$lenght = units::set_units(0, km)
 
@@ -73,7 +73,8 @@ mapTheme <- function(base_size = 12) {
     plot.subtitle=element_text(face="italic"),
     plot.caption=element_text(hjust=0),
     axis.ticks = element_blank(),
-    panel.background = element_blank(),
+    # panel.background = element_blank(), #transparente
+    panel.background = element_rect(fill = "white"),
     #panel.grid.major = element_line("grey80", size = 0.1),
     panel.grid.major = element_line(color = "transparent"),
     strip.text = element_text(size=14,face = "bold"),
@@ -89,7 +90,76 @@ mapTheme <- function(base_size = 12) {
     legend.text = element_text(colour = "black", face = "italic"))
 }
 ```
-```{r include=FALSE}
+
+
+### Função para gravar uma imagem para cada ano
+```{r}
+#preparar a função
+listaAnos = seq(1:22)+2000
+RedeCiclavelLxkm <- function(Year){
+  slideano =  ggplot()+
+    mapTheme()+
+    #mapa base
+    geom_sf(LisboaLimite, mapping = aes(), color = NA) +
+    #rede existente no ano anterior
+    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==Year),
+          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
+    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Nao dedicada" & AnoT==Year),
+          aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
+    #novas ciclovias naquele ano
+    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==Year),aes(),
+          color="#1A7832",size=1.1,show.legend=F) +
+    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Nao dedicada" & ANO==Year),aes(),
+          color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11 para tracejado
+    #aplicar o estilo com o ano em cima
+    facet_wrap(~AnoT, nrow=1)+
+    #adicionar o contador de km
+    geom_text(data=subset(CicloviasKMredux,AnoT==Year),
+            aes(x=-9.1,y=38.692,label=Kms), size=6,inherit.aes=FALSE)
+  
+    #gravar cada imagem
+    ggsave(slideano, filename=paste0("GIF/2022/",Year,"km.png"),
+         units="cm", width=18, height=18, dpi=300)
+}
+    
+```
+#### Correr a função 
+Para guardar cada imagem em separado
+```{r}
+ listaAnos %>% map_df(RedeCiclavelLxkm)
+```
+
+E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, por exemplo.
+
+
+#### Ou gravar logo como gif
+
+```{r}
+library(magick)
+imgs <- list.files("GIF/2022/", full.names = TRUE)
+img_list <- lapply(imgs, image_read)
+
+## join the images together
+img_joined <- image_join(img_list)
+img_joined = image_scale(img_joined, "700x700")
+
+## animate at 2 frames per second
+img_animated <- image_animate(img_joined, fps = 2)
+
+## view animated image
+img_animated
+
+## save to disk
+image_write(image = img_animated,
+            path = "GIF/RedeCiclavelLisboa2022.gif")
+  
+```
+
+
+
+## Em teste...
+
+```{r include=FALSE, eval=FALSE}
 #theme para facets, com Ano mais pequeno
 mapThemeFacets <- function(base_size = 12) {
   theme(
@@ -114,103 +184,6 @@ mapThemeFacets <- function(base_size = 12) {
     legend.text = element_text(colour = "black", face = "italic"))
 }
 ```
-
-
-### Função para gravar uma imagem para cada ano
-```{r}
-#preparar a função
-listaAnos = seq(1:20)+2000
-RedeCiclavelLxkm <- function(Year){
-  ggplot()+
-    mapTheme()+
-    #mapa base
-    geom_sf(LisboaLimite, mapping = aes(), color = NA) +
-    #rede existente no ano anterior
-    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==Year),
-          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
-    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Nao dedicada" & AnoT==Year),
-          aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
-    #novas ciclovias naquele ano
-    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==Year),aes(),
-          color="#1A7832",size=1.1,show.legend=F) +
-    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Nao dedicada" & ANO==Year),aes(),
-          color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11 para tracejado
-    #aplicar o estilo com o ano em cima
-    facet_wrap(~AnoT, nrow=1)+
-    #adicionar o contador de km
-    geom_text(data=subset(CicloviasKMredux,AnoT==Year),
-            aes(x=-9.1,y=38.692,label=Kms), size=6,inherit.aes=FALSE) +
-    #gravar cada imagem
-    ggsave(filename=paste0("GIF/exemp2/",Year,"km.png"),
-         units="cm", width=18, height=18, dpi=300)
-}
-
- #testar
-   # ggplot()+
-   #  mapTheme()+
-   #  geom_sf(LisboaLimite, mapping = aes(), color = NA) +
-   #  geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==2019),
-   #        aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
-   #  geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Nao dedicada" & AnoT==2019),
-   #        aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
-   #  geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==2019),aes(),
-   #        color="#1A7832",size=1.1,show.legend=F) +
-   #  geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Nao dedicada" & ANO==2019),aes(),
-   #        color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11
-   #  facet_wrap(~AnoT, nrow=1)+
-   #  geom_text(data=subset(CicloviasKMredux,AnoT==2019),
-   #          aes(x=-9.1,y=38.692,label=Kms), size=6,inherit.aes=FALSE) +
-   #  ggsave(filename=paste0("GIF/",2019,"km.png"),
-   #       units="cm",width=20, height=18, dpi=300)
-    
-```
-#### Correr a função 
-Para guardar cada imagem em separado
-```{r}
- listaAnos %>% map_df(RedeCiclavelLxkm)
-```
-
-E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, por exemplo.
-
-
-
-
-#### Ou gravar logo como gif
-```{r, eval=F}
-  cucu = seq(1:20)+2000
-
-   saveGIF({
-     for (Year in cucu){
-       p= ggplot()+
-    mapTheme()+
-    #mapa base
-    geom_sf(LisboaLimite, mapping = aes(), color = NA) +
-    #rede existente no ano anterior
-    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Ciclovia dedicada" & AnoT==Year),
-          aes(fill =AnoT),color="grey65",size=0.9, show.legend=F) +
-    geom_sf(data=subset(CICLOVIASredux,TIPOLOGIA=="Nao dedicada" & AnoT==Year),
-          aes(fill =AnoT),color="grey80",size=1, show.legend=F) +
-    #novas ciclovias naquele ano
-    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Ciclovia dedicada" & ANO==Year),aes(),
-          color="#1A7832",size=1.1,show.legend=F) +
-    geom_sf(data=subset(CICLOVIASgif,TIPOLOGIA=="Nao dedicada" & ANO==Year),aes(),
-          color="#AFD4A0",size=1.1,show.legend=F) + #lty=88 ou 11 para tracejado
-    #aplicar o estilo com o ano em cima
-    facet_wrap(~AnoT, nrow=1)+
-    #adicionar o contador de km
-    geom_text(data=subset(CicloviasKMredux,AnoT==Year),
-            aes(x=-9.1,y=38.692,label=Kms), size=6,inherit.aes=FALSE)
-    print(p)
-     }
-   },
-   movie.name = "CicloviasAnos/gif/RedeCiclavelLisboa2020_green.gif",
-   interval = 1,
-   ani.width= 600,
-   ani.height= 600) # se bem que é mais difícil controlar a resolução
-```
-
-
-## Em teste...
 
 ```{r eval=FALSE, include=FALSE}
 #imagens em facet, em tons de cinza
