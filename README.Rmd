@@ -25,8 +25,9 @@ https://geodados-cml.hub.arcgis.com/datasets/rede-cicl%C3%A1vel/
 
 #### Importar rede ciclável
 ```{r eval=FALSE}
-#actualizar para 2022 a partir do server da CML
-CicloviasATUAL = st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson") 
+#actualizar para 2023 a partir do server da CML
+CicloviasATUAL23 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson") 
+# infelixmente não têm os mesmos campos entre anos :(
 ```
 
 #### Processo
