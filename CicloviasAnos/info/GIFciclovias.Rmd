@@ -95,7 +95,7 @@ mapTheme <- function(base_size = 12) {
 ### Função para gravar uma imagem para cada ano
 ```{r}
 #preparar a função
-listaAnos = seq(1:22)+2000
+listaAnos = seq(1:23)+2000
 RedeCiclavelLxkm <- function(Year){
   slideano =  ggplot()+
     mapTheme()+
@@ -118,7 +118,7 @@ RedeCiclavelLxkm <- function(Year){
             aes(x=-9.1,y=38.692,label=Kms), size=6,inherit.aes=FALSE)
   
     #gravar cada imagem
-    ggsave(slideano, filename=paste0("GIF/2022/",Year,"km.png"),
+    ggsave(slideano, filename=paste0("GIF/2023/",Year,"km.png"),
          units="cm", width=18, height=18, dpi=300)
 }
     
@@ -128,6 +128,7 @@ Para guardar cada imagem em separado
 ```{r}
  listaAnos %>% map_df(RedeCiclavelLxkm)
 ```
+Duplicar o último frame para ficar parado mais tempo no final.
 
 E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, por exemplo.
 
@@ -136,7 +137,7 @@ E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, po
 
 ```{r}
 library(magick)
-imgs <- list.files("GIF/2022/", full.names = TRUE)
+imgs <- list.files("GIF/2023/", full.names = TRUE)
 img_list <- lapply(imgs, image_read)
 
 ## join the images together
@@ -151,7 +152,7 @@ img_animated
 
 ## save to disk
 image_write(image = img_animated,
-            path = "GIF/RedeCiclavelLisboa2022.gif")
+            path = "GIF/RedeCiclavelLisboa2023.gif")
   
 ```
 

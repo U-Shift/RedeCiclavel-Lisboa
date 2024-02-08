@@ -23,8 +23,8 @@ addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/in
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                      min(CICLOVIAS$AnoT, na.rm = t),
                      max(CICLOVIAS$AnoT, na.rm = t),
-                     selected = "2011",
-                     choices = as.character(seq(2001,2022)),
+                     selected = "2012",
+                     choices = as.character(seq(2001,2023)),
                    # sep = "",
                    # grid = T,
                      animate = animationOptions(interval = 2002),
@@ -74,7 +74,7 @@ ui =
             h2("Evolução da rede ciclável em Lisboa"),
             br(),
             fluidRow(column(8, offset = 3,
-            img(src = "gif/RedeCiclavelLisboa2022.gif", align = "center",height="500px") 
+            img(src = "gif/RedeCiclavelLisboa2023.gif", align = "center",height="500px") 
             #tags$video(src = "gif/RedeCiclavelLisboa2020.mp4", align = "center",height="500px")
                 ))
             ),
@@ -96,7 +96,7 @@ ui =
           
               tabPanel("Processamento dos dados",
                      #  uiOutput("preparacao")
-                       includeMarkdown("info/preparacao.Rmd")
+                       includeMarkdown("info/preparacao2023.Rmd")
                      # includeHTML("info/preparacao2.html")
                       ),
               

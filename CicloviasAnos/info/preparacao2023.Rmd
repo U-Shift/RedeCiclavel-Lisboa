@@ -28,6 +28,7 @@ library(cartography)
 #### Importar rede ciclável
 Download da informação geoffererenciada a partir do servidor da CML: 
 https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson
+
 ```{r eval=FALSE}
 CicloviasAnteriores = readRDS("CicloviasAnos/CicloviasAnos.Rds")
 Ciclovias2023 = st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson")
@@ -66,67 +67,61 @@ Adicionar as novas que não estavam na shp anterior de Dez 2022.
 #filtrar só últimos anos
 Ciclovias2023 = Ciclovias2023 %>% filter(ANO == 2023)
 
+#exportar e abrir no sig
+st_write(Ciclovias2023, "data/Ciclovias2023_dez_cml.gpkg", delete_dsn = TRUE)
+
 #prolongar vida ultimos anos
 CicloviasAnteriores_23 = CicloviasAnteriores %>% filter(AnoT == 2022) %>% mutate(AnoT = 2023)
 CicloviasAnteriores = rbind(CicloviasAnteriores, CicloviasAnteriores_23)
-
-#exportar e abrir no sig
-st_write(Ciclovias2023, "data/Ciclovias2023_dez_cml.gpkg", delete_dsn = TRUE)
 ```
-
-##################################### continuar daqui ##########################################
 
 
 #### Importar novamente o shp atualizado
-```{r}
-Ciclovias2022_new = st_read("data/Ciclovias2022_dez_corrigido.gpkg")
 
-### Duplicar anos mais recentes
-
-Ciclovias2022_new_21_22 = Ciclovias2022_new %>% filter(AnoT == 2021 & ANO == 2021) %>% mutate(AnoT = 2022)
-
-Ciclovias2022_new_20_21 = Ciclovias2022_new %>% filter(AnoT == 2020 & ANO == 2020) %>% mutate(AnoT = 2021)
-Ciclovias2022_new_20_22 = Ciclovias2022_new %>% filter(AnoT == 2020 & ANO == 2020) %>% mutate(AnoT = 2022)
-
-Ciclovias2022_new = rbind(Ciclovias2022_new, Ciclovias2022_new_20_21, Ciclovias2022_new_20_22, Ciclovias2022_new_21_22)
-
-```
-
-#### Acertar Almirante Reis e Infante D Henrique nas suas versões
+Neste caso removeu-se um troço de ciclovia na Rua Francisco Gentil Martins (que já existia anteriormente), e adicionou-se o troço da Rua da Prata.
+Atualizou-se a ciclovia da Av Berna / Praça de Espanha, que passou a ter nova configuração.
 
 ```{r}
-#procurar por "1a versão" e eliminar o que está posterior a 2021
-Ciclovias2022_new = Ciclovias2022_new %>% filter(!row_number() %in% c(1696, 1776))
-
-# ver Av Infante D Henrique com extensao 0.7187, eliminar posterior a 2020
-Ciclovias2022_new = Ciclovias2022_new %>% filter(!row_number() %in% c(252, 1083, 1230))
+Ciclovias2023_new = st_read("data/Ciclovias2023_dez_corrigido.gpkg")
+AvBerna23 = st_read("data/avberna_2023.gpkg", layer = "avberna_2023")
+Ciclovias2023_new = rbind(Ciclovias2023_new|> select(-NIVEL_SEGREGACAO), AvBerna23 |> select(-AnoT, -lenght))
+# Rua da Prata em dúvida quanto à sua categoria
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$DESIGNACAO=="Rua da Prata"] = "Nao dedicada"
+# por acgora fica equivalente a uma bici+30, e não um percurso ciclopedonal (tipo trilho)
 ```
-
 
 #### Reclassificar ciclovias
 Em __dedicadas__ (uni e bi-direccionais, pistas cicláveis) e __não-dedicadas__ (30+bici, zona de coexistência), e __percursos em coexistência com o peão__ (ciclo-pedonal)
 ```{r eval=FALSE}
-table(Ciclovias2022_new$TIPOLOGIA)
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Percurso Ciclopedonal"] = "Percurso Ciclo-pedonal"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Pista Ciclável Unidirecional"] = "Ciclovia dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Pista ciclável (ciclovia)"] = "Ciclovia dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Contrassentido"] = "Ciclovia dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Faixa Ciclável"] = "Ciclovia dedicada"
+table(Ciclovias2023_new$TIPOLOGIA)
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Percurso Ciclopedonal"] = "Percurso Ciclo-pedonal"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Pista Ciclável Unidirecional"] = "Ciclovia dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Pista ciclável (ciclovia)"] = "Ciclovia dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Contrassentido"] = "Ciclovia dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Faixa Ciclável"] = "Ciclovia dedicada"
 
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
-Ciclovias2022_new$TIPOLOGIA[Ciclovias2022_new$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
+Ciclovias2023_new$TIPOLOGIA[Ciclovias2023_new$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
 ```
 
-##### Acertar geometria
+#### Juntar novamente com as anteriores
 ```{r eval=FALSE}
-#renomear
-Ciclovias = Ciclovias2022_new
-Ciclovias$TIPOLOGIA = factor(Ciclovias$TIPOLOGIA)
+# preparar tabela
+Ciclovias2023_new = Ciclovias2023_new |> select(DESIGNACAO, TIPOLOGIA, geom) |> 
+  mutate(ANO = 2023, AnoT = 2023, lenght = st_length(geom) %>% units::set_units(km))
+# # rename sf column
+# st_geometry(Ciclovias2023_new) = "geom"
+
+#factor tipologia
+Ciclovias2023_new$TIPOLOGIA = factor(Ciclovias2023_new$TIPOLOGIA)
+
+#juntar
+Ciclovias = bind_rows(CicloviasAnteriores, Ciclovias2023_new)
 
 #recalcular geometria
-Ciclovias$lenght = st_length(Ciclovias) %>% units::set_units(km)
+# Ciclovias$lenght = st_length(Ciclovias) %>% units::set_units(km)
 sum(Ciclovias$lenght)
 # calma, há segmentos que foram destruídos entretanto
 ```
@@ -136,18 +131,24 @@ Todas as ciclovias que existem ou existiram no server da CML
 ```{r eval=FALSE}
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=T, legend=T)
 ```
-![](figs/todas.png)
-
-
-Confirmar mapa actual
+![](figs/todas_pratanaodedicada.png)
+### Remover ciclovias que desapareceram entretanto
 ```{r eval=FALSE}
-cic22=Ciclovias[Ciclovias$AnoT==2022,]
+# remover anterior Av Berna em 2023
+Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Avenida de Berna" & AnoT == 2023)) # Av berna todas
+Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Praça Espanha" & AnoT == 2023 & ANO == 2021)) # Pç espanha ligacao
+#as novas configurações da Pc Espanha já vinham no ficheiro avberna_2023
+```
+
+### Confirmar mapa actual
+```{r eval=FALSE}
+cic23=Ciclovias[Ciclovias$AnoT==2023,]
 # greens3 = cartography::carto.pal(pal1 = "green.pal", 3)
 # greens3 = rev(greens3)
 greens3 = c("#197230", "#5A9C50", "#B2D6A3")
-mapview(cic22, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
+mapview(cic23, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=T, legend=T)
 ```
-![](figs/tipologia22.png)
+![](figs/tipologia23.png)
 
 ### Adicionar contador de km
 ```{r eval=FALSE}
@@ -171,7 +172,7 @@ CicloviasAnos = Ciclovias %>%
   group_by(DESIGNACAO,TIPOLOGIA,AnoT,ANO) %>% summarise() %>% ungroup()
 
 CicloviasAnos$lenght = st_length(CicloviasAnos) %>% units::set_units(km)
-sum(CicloviasAnos$lenght[CicloviasAnos$AnoT==2022]) #extensão da rede actual
+sum(CicloviasAnos$lenght[CicloviasAnos$AnoT==2023]) #extensão da rede actual
 ```
 
 ## Guardar ficheiros
@@ -182,6 +183,6 @@ saveRDS(CicloviasKM, "CicloviasAnos/CicloviasKM.Rds")
 ```
 
 ```{r}
-st_write(Ciclovias, "data/Ciclovias_dez2022_CORRECT.gpkg")
+st_write(Ciclovias, "data/Ciclovias_dez2023_CORRECT.gpkg", delete_dsn = TRUE)
 ```
 
