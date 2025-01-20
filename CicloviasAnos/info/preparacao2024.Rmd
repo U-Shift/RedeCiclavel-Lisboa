@@ -92,15 +92,15 @@ Neste caso adicionou-se:
 Ciclovias2024_outrasanteriores = st_read("data/Ciclovias2023-24_pre.gpkg")
 Ciclovias2024_outrasanteriores = Ciclovias2024_outrasanteriores |> filter(is.na(AnoT)) |> filter(ANO == "2023")
 # duplicar para os anos seguintes
-
-# 2.   Estrada do Barcal (desde 2023)
-Ciclovias2024_outrasanteriores_1_23 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2023)
-Ciclovias2024_outrasanteriores_1_24 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2024)
-Ciclovias2024_outrasanteriores = rbind(
-  Ciclovias2024_outrasanteriores,
-  Ciclovias2024_outrasanteriores_1_23,
-  Ciclovias2024_outrasanteriores_1_24
-)
+# 
+# # 2.   Estrada do Barcal (desde 2023)
+# Ciclovias2024_outrasanteriores_1_23 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2023)
+# Ciclovias2024_outrasanteriores_1_24 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2024)
+# Ciclovias2024_outrasanteriores = rbind(
+#   Ciclovias2024_outrasanteriores,
+#   Ciclovias2024_outrasanteriores_1_23,
+#   Ciclovias2024_outrasanteriores_1_24
+# )
 
 # limpar
 rm(Ciclovias2024_outrasanteriores_1_23, Ciclovias2024_outrasanteriores_1_24)
