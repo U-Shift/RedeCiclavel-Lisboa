@@ -82,6 +82,9 @@ Neste caso adicionou-se:
 *  Sete Rios
 *  Parada Alto de São João
 *  Largo de São Sebastião
+*  Rua das Musas
+*  Rua Pedro e Inês
+
 
 
 #### Incluir as anteriores que não tinham data ou não estavam no da CML
@@ -152,11 +155,16 @@ Ciclovias = bind_rows(CicloviasAnteriores, Ciclovias2024_new)
 #remover duplicados
 Ciclovias = distinct(Ciclovias)
 
+# atribuir ID para ser mais fácil o corte e costura
+Ciclovias = Ciclovias |> mutate(id = as.integer(row.names(Ciclovias)))
+
 
 #recalcular geometria
 # Ciclovias$lenght = st_length(Ciclovias) %>% units::set_units(km)
-sum(Ciclovias$lenght)
+sum(Ciclovias$lenght[Ciclovias$AnoT==2024]) #extensão da rede actual
 # calma, há segmentos que foram destruídos entretanto
+# exportar e corrigig no sig
+st_write(Ciclovias, "data/Ciclovias2024_corrigir.gpkg", delete_dsn = TRUE)
 ```
 
 ### Ver num mapa
@@ -165,11 +173,66 @@ Todas as ciclovias que existem ou existiram no server da CML
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=F, legend=T)
 ```
 ![](figs/todas_pratanaodedicada.png)
+
 ### Remover ciclovias que desapareceram entretanto
 
 
 
 Atualizou-se a ciclovia do Passeio de Neptuno e da Praça de Espanha, que passou a ter nova configuração.
+
+#### Passeio de Neptuno
+
+```{r}
+Ciclovias_corrigir_trocos = st_read("data/Ciclovias2024_corrigir_trocos.gpkg")
+#neptuno - 9000, era de 2010 e desaparece em 2024
+neptuno_id = c(1032:1045, 1992)
+neptuno_novo_11 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2011)
+neptuno_novo_12 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2012)
+neptuno_novo_13 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2013)
+neptuno_novo_14 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2014)
+neptuno_novo_15 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2015)
+neptuno_novo_16 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2016)
+neptuno_novo_17 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2017)
+neptuno_novo_18 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2018)
+neptuno_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2019)
+neptuno_novo_20 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2020)
+neptuno_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2021)
+neptuno_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2022)
+neptuno_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2023)
+neptuno_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032)) |> mutate(AnoT = 2024)
+                                                       
+
+Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_id)) |> rbind(neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24)
+```
+
+#### Praça de Londres
+
+```{r}
+londres1_id = c(1046:1049, 2010)
+londres1_novo = Ciclovias_corrigir_trocos %>% filter(id %in% c(9100:9150))
+
+Ciclovias = Ciclovias %>% filter(!(id %in% londres1_id)) |> rbind(londres1_novo)
+
+londres2_id = c(274,275,276,278,280,282, 1896)
+londres2_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200)) |> mutate(AnoT = 2019)
+londres2_novo_20 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2020)
+londres2_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2021)
+londres2_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2022)
+londres2_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2023)
+londres2_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% londres2_id)) |> rbind(londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24)
+
+londres3_id = c(287,289,291,293,1899)
+londres3_novo_21 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2021)
+londres3_novo_22 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2022)
+londres3_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2023)
+londres3_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2024)
+```
+
+#### Praça de Espanha
+
+<!-- CCONTINUAR DAQUI -->
 
 
 
