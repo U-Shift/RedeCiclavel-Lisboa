@@ -106,7 +106,7 @@ Ciclovias2024_outrasanteriores = Ciclovias2024_outrasanteriores |> filter(is.na(
 # )
 
 # limpar
-rm(Ciclovias2024_outrasanteriores_1_23, Ciclovias2024_outrasanteriores_1_24)
+# rm(Ciclovias2024_outrasanteriores_1_23, Ciclovias2024_outrasanteriores_1_24)
 
 ```
 
@@ -164,7 +164,7 @@ Ciclovias = Ciclovias |> mutate(id = as.integer(row.names(Ciclovias)))
 sum(Ciclovias$lenght[Ciclovias$AnoT==2024]) #extensão da rede actual
 # calma, há segmentos que foram destruídos entretanto
 # exportar e corrigig no sig
-st_write(Ciclovias, "data/Ciclovias2024_corrigir.gpkg", delete_dsn = TRUE)
+# st_write(Ciclovias, "data/Ciclovias2024_corrigir.gpkg", delete_dsn = TRUE)
 ```
 
 ### Ver num mapa
@@ -177,15 +177,15 @@ mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=F, legend=T)
 ### Remover ciclovias que desapareceram entretanto
 
 
-
-Atualizou-se a ciclovia do Passeio de Neptuno e da Praça de Espanha, que passou a ter nova configuração.
+Atualizou-se a ciclovia do Passeio de Neptuno, Praça de Londres, Calouste Gulbenkian e da Praça de Espanha, que passou a ter nova configuração.
 
 #### Passeio de Neptuno
 
-```{r}
+```{r eval=FALSE}
 Ciclovias_corrigir_trocos = st_read("data/Ciclovias2024_corrigir_trocos.gpkg")
 #neptuno - 9000, era de 2010 e desaparece em 2024
 neptuno_id = c(1032:1045, 1992)
+neptuno_novo_10 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000))
 neptuno_novo_11 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2011)
 neptuno_novo_12 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2012)
 neptuno_novo_13 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> mutate(AnoT = 2013)
@@ -202,18 +202,19 @@ neptuno_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032,9000)) |> 
 neptuno_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032)) |> mutate(AnoT = 2024)
                                                        
 
-Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_id)) |> rbind(neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24)
+Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_id)) |> rbind(neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24)
 ```
 
 #### Praça de Londres
 
-```{r}
+```{r eval=FALSE}
 londres1_id = c(1046:1049, 2010)
 londres1_novo = Ciclovias_corrigir_trocos %>% filter(id %in% c(9100:9150))
 
 Ciclovias = Ciclovias %>% filter(!(id %in% londres1_id)) |> rbind(londres1_novo)
 
 londres2_id = c(274,275,276,278,280,282, 1896)
+londres2_novo_18 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200))
 londres2_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200)) |> mutate(AnoT = 2019)
 londres2_novo_20 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2020)
 londres2_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2021)
@@ -221,25 +222,58 @@ londres2_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> muta
 londres2_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2023)
 londres2_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9200)) |> mutate(AnoT = 2024)
 
-Ciclovias = Ciclovias %>% filter(!(id %in% londres2_id)) |> rbind(londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24)
+Ciclovias = Ciclovias %>% filter(!(id %in% londres2_id)) |> rbind(londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24)
 
 londres3_id = c(287,289,291,293,1899)
+londres3_novo_20 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2020)
 londres3_novo_21 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2021)
 londres3_novo_22 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2022)
 londres3_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2023)
 londres3_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% londres3_id)) |> rbind(londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24)
 ```
 
 #### Praça de Espanha
 
-<!-- CCONTINUAR DAQUI -->
-
-
-
 ```{r eval=FALSE}
+espanha1_id = c(1328:1331, 2043) 
+espanha1_novo_20 = Ciclovias_corrigir_trocos %>% filter(id ==1328)
+espanha1_novo_21 = Ciclovias_corrigir_trocos %>% filter(id ==1328) |> mutate(AnoT = 2021)
+espanha1_novo_22 = Ciclovias_corrigir_trocos %>% filter(id ==1328) |> mutate(AnoT = 2022)
+espanha1_novo_23 = Ciclovias_corrigir_trocos %>% filter(id ==1328) |> mutate(AnoT = 2023)
+espanha1_novo_24 = Ciclovias_corrigir_trocos %>% filter(id ==1328) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% espanha1_id)) |> rbind(espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24)
+
+espanha2_id = c(192:195, 1884)
+espanha2_novo_20 = Ciclovias_corrigir_trocos %>% filter(id == 192)
+espanha2_novo_21 = Ciclovias_corrigir_trocos %>% filter(id == 192) |> mutate(AnoT = 2021)
+espanha2_novo_22 = Ciclovias_corrigir_trocos %>% filter(id == 192) |> mutate(AnoT = 2022)
+espanha2_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 192) |> mutate(AnoT = 2023)
+espanha2_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 192) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% espanha2_id)) |> rbind(espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24)
+
+espanha3_id = c(164:166, 1886)
+espanha3_novo_21 = Ciclovias_corrigir_trocos %>% filter(id == 164)
+espanha3_novo_22 = Ciclovias_corrigir_trocos %>% filter(id == 164) |> mutate(AnoT = 2022)
+espanha3_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 164) |> mutate(AnoT = 2023)
+espanha3_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 164) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% espanha3_id)) |> rbind(espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24)
+
+```
+
+```{r eval=FALSE, include=FALSE}
+rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24, espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24)
+```
+
+
+```{r eval=FALSE, include=FALSE}
 # remover anterior Av Berna em 2024
-Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Avenida de Berna" & AnoT == 2024)) # Av berna todas
-Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Praça Espanha" & AnoT == 2024 & ANO == 2021)) # Pç espanha ligacao
+# Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Avenida de Berna" & AnoT == 2024)) # Av berna todas
+# Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Praça Espanha" & AnoT == 2024 & ANO == 2021)) # Pç espanha ligacao
 #as novas configurações da Pc Espanha já vinham no ficheiro avberna_2024
 ```
 
@@ -286,6 +320,6 @@ saveRDS(CicloviasKM, "CicloviasAnos/CicloviasKM.Rds")
 ```
 
 ```{r}
-st_write(Ciclovias, "data/Ciclovias_dez2024_CORRECT.gpkg", delete_dsn = TRUE)
+st_write(Ciclovias |> select(-id), "data/Ciclovias_dez2024_CORRECT.gpkg", delete_dsn = TRUE)
 ```
 
