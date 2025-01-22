@@ -131,10 +131,6 @@ Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Faixa Ciclável"] = "C
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
 
-## Excepções
-# Ciclovia das Calvana (issue #23)
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Percurso Ciclo-pedonal" & Ciclovias2024_new$DESIGNACAO == "Avenida Marechal Craveiro Lopes"] = "Ciclovia dedicada"
-
 #factor tipologia
 Ciclovias2024_new = Ciclovias2024_new |> mutate(TIPOLOGIA = factor(TIPOLOGIA))
 table(Ciclovias2024_new$TIPOLOGIA)
