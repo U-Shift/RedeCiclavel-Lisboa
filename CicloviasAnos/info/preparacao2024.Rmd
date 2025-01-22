@@ -93,21 +93,12 @@ Neste caso adicionou-se:
 
 ```{r eval=FALSE}
 Ciclovias2024_outrasanteriores = st_read("data/Ciclovias2023-24_pre.gpkg")
-Ciclovias2024_outrasanteriores = Ciclovias2024_outrasanteriores |> filter(is.na(AnoT)) |> filter(ANO == "2023")
+Ciclovias2024_outrasanteriores = Ciclovias2024_outrasanteriores |> filter(is.na(AnoT)) |> filter(ANO == "2023") |> mutate(AnoT = 2023)
 # duplicar para os anos seguintes
-# 
-# # 2.   Estrada do Barcal (desde 2023)
-# Ciclovias2024_outrasanteriores_1_23 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2023)
-# Ciclovias2024_outrasanteriores_1_24 = Ciclovias2024_outrasanteriores %>% filter(DESIGNACAO == "Alta de Lisboa") |> mutate(AnoT = 2024)
-# Ciclovias2024_outrasanteriores = rbind(
-#   Ciclovias2024_outrasanteriores,
-#   Ciclovias2024_outrasanteriores_1_23,
-#   Ciclovias2024_outrasanteriores_1_24
-# )
-
+Ciclovias2024_outrasanteriores_24 = Ciclovias2024_outrasanteriores |> mutate(AnoT = 2024)
+Ciclovias2024_outrasanteriores = rbind(Ciclovias2024_outrasanteriores, Ciclovias2024_outrasanteriores_24)
 # limpar
-# rm(Ciclovias2024_outrasanteriores_1_23, Ciclovias2024_outrasanteriores_1_24)
-
+rm(Ciclovias2024_outrasanteriores_24)
 ```
 
 ```{r, eval=FALSE}
@@ -128,6 +119,7 @@ Ciclovias2024_new = rbind(Ciclovias2024_new, Ciclovias2024_outrasanteriores)
 Em __dedicadas__ (uni e bi-direccionais, pistas cicláveis) e __não-dedicadas__ (30+bici, zona de coexistência), e __percursos em coexistência com o peão__ (ciclo-pedonal)
 ```{r eval=FALSE}
 table(Ciclovias2024_new$TIPOLOGIA)
+Ciclovias2024_new$TIPOLOGIA = as.character(Ciclovias2024_new$TIPOLOGIA)
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Percurso Ciclopedonal"] = "Percurso Ciclo-pedonal"
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia dedicada"
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia dedicada"
@@ -139,8 +131,13 @@ Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Faixa Ciclável"] = "C
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
 Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
 
+## Excepções
+# Ciclovia das Calvana (issue #23)
+Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Percurso Ciclo-pedonal" & Ciclovias2024_new$DESIGNACAO == "Avenida Marechal Craveiro Lopes"] = "Ciclovia dedicada"
+
 #factor tipologia
-Ciclovias2024_new$TIPOLOGIA = factor(Ciclovias2024_new$TIPOLOGIA)
+Ciclovias2024_new = Ciclovias2024_new |> mutate(TIPOLOGIA = factor(TIPOLOGIA))
+table(Ciclovias2024_new$TIPOLOGIA)
 ```
 
 #### Juntar novamente com as anteriores
