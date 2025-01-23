@@ -137,7 +137,17 @@ server = function(input, output) {
                        options = layersControlOptions(collapsed = F))%>%
       hideGroup(c("Percurso Ciclo-pedonal")) %>% 
       addLegend(position = "bottomright", colors = c("#1A7832","#AFD4A0"), 
-                labels = c("Ciclovia dedicada", "Segemento não dedicado"))       
+                labels = c("Ciclovia dedicada", "Segemento não dedicado")) |> 
+      addMeasure(position = "bottomleft",
+                 primaryLengthUnit = "meters",
+                 secondaryLengthUnit = NULL, # não está a dar para esconder
+                 primaryAreaUnit = "sqmeters", #idem, mesmo que meta NULL
+                 secondaryAreaUnit = NULL,
+                 thousandsSep = ".",
+                 localization = "pt_PT",
+                 activeColor = "#0E4C92",
+                 completedColor = "#000080")
+    
       })
   
   observe({
