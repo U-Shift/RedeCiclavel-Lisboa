@@ -25,8 +25,8 @@ https://geodados-cml.hub.arcgis.com/datasets/rede-cicl%C3%A1vel/
 
 #### Importar rede ciclável
 ```{r eval=FALSE}
-#actualizar para 2023 a partir do server da CML
-CicloviasATUAL23 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson") 
+#actualizar para 2024 a partir do server da CML
+CicloviasATUAL24 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson") 
 # infelixmente não têm os mesmos campos entre anos :(
 ```
 
@@ -34,11 +34,11 @@ CicloviasATUAL23 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arc
 
 O processo envolve limpeza, remoção de repetidos, reclassifiação de tipologia, tratamento especial de segmentos que foram alterados ao longo dos anos.
 
-> Última atualização a 12.Dezembro.2022
+> Última atualização a 23.Janeiro.2025
 
 ## GIF com evolução
 [Ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/GIFciclovias.Rmd), usando a informação processada aqui.  
-Resultado em [RedeCiclavelLisboa2022.gif](http://shiny.rosafelix.bike/ciclovias/gif/RedeCiclavelLisboa2022.gif)
+Resultado em [RedeCiclavelLisboa2024.gif](http://shiny.rosafelix.bike/ciclovias/gif/RedeCiclavelLisboa2024.gif)
 
 ## Mapa interactivo por anos
 [ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/CicloviasAnos/app.R), usando a informação processada aqui.  

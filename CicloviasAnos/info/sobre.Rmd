@@ -13,7 +13,7 @@ Esta App utiliza os seguintes packages: `shiny`, `sf`, `leaflet`, `dplyr`, `ggpl
 ## Dados
 
 A informação sobre as ciclovias foi recolhida através do [portal de geodados da Câmara Municipal de Lisboa](https://geodados-cml.hub.arcgis.com/datasets/rede-cicl%C3%A1vel/), que mantém esta base de dados actualizada com regularidade.  
-`última actualização: 08.Fevereiro.2024`  
+`última actualização: 23.Janeiro.2025`  
   
 O **ano de construção** e **tipologias** foram depois acertadas, tal como desrito no código-fonte.
 São também apresentadas ciclovias que deixaram de existir ou que foram corrigidas, tais como:  
@@ -23,6 +23,7 @@ São também apresentadas ciclovias que deixaram de existir ou que foram corrigi
 *   Braço de Prata - Matinha, reformulação do traçado
 *   Avenida Almirante Reis, reformulação do traçado
 *   Avenida de Berna, reformulação do traçado
+*   Passeio de Neptuno e ligação Av dos Oceanos, reformulação do traçado
 
 
 ### Créditos
