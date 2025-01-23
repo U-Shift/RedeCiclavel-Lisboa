@@ -277,6 +277,14 @@ server = function(input, output) {
       mutate(Kms = units::drop_units(lenght) |> round(digits = 1)) |> 
       select(AnoT, TIPOLOGIA, Kms) |> 
       pivot_wider(names_from = AnoT, values_from = Kms)
+    
+    total_row <- data_table %>% # Calculate the "Total" row
+      select(-TIPOLOGIA) %>%
+      summarise(across(everything(), ~ round(sum(.x, na.rm = TRUE), 1))) %>%
+      mutate(TIPOLOGIA = "Total")  # Add the "Total" label to the row
+    
+    data_table <- bind_rows(data_table, total_row) # Append the "Total" row to the table
+    
     data_table[data_table == 0] = NA
     
     # Render the table
@@ -288,7 +296,7 @@ server = function(input, output) {
                              dom = 'tB', # Only show table and buttons
                              digits = 1,
                              scrollX = TRUE, # Enable horizontal scrolling
-                             autoWidth = TRUE, # Automatically adjust column widths
+                             # autoWidth = TRUE, # Automatically adjust column widths
                              buttons = "excel"), # Add buttons to export table
               rownames = FALSE) # Remove row numbers
   })
