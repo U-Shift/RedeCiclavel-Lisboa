@@ -3,6 +3,7 @@ library(shiny)
 library(shinyWidgets)
 library(sf)
 library(leaflet)
+library(htmltools)
 library(dplyr)
 library(ggplot2)
 library(plotly)
@@ -41,6 +42,8 @@ kilometros = column(2,
                     tags$h5(textOutput("kmspedonal"))
                     #converter para tabela?
                     )
+  
+
 
 #criar o rmd
 # rmarkdown::render(input = "info/preparacao.Rmd",
@@ -134,8 +137,7 @@ server = function(input, output) {
                        options = layersControlOptions(collapsed = F))%>%
       hideGroup(c("Percurso Ciclo-pedonal")) %>% 
       addLegend(position = "bottomright", colors = c("#1A7832","#AFD4A0"), 
-                labels = c("Ciclovia dedicada", "Segemento não dedicado"))
-      
+                labels = c("Ciclovia dedicada", "Segemento não dedicado"))       
       })
   
   observe({
@@ -150,7 +152,13 @@ server = function(input, output) {
                    opacity = 1,
                    smoothFactor = 1, 
                    options = pathOptions(pane = "acima"),
-                   popup = ~DESIGNACAO,
+                   label = ~DESIGNACAO,
+                   popup = sprintf("<strong>%s</strong><br>%s<br>Ano: %s<br>Extensão: %s metros", # ver o pq do %s ou %g: https://rdrr.io/r/base/sprintf.html
+                                   CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
+                                   CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
+                                   CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
+                                   round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"] *1000)) |> #em metros 
+                     lapply(htmltools::HTML),
                    group = "Ciclovias") %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
@@ -159,7 +167,13 @@ server = function(input, output) {
                    opacity = 1,
                    smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
-                   popup = ~DESIGNACAO,
+                   label = ~DESIGNACAO,
+                   popup = sprintf("<strong>%s</strong><br>%s<br>Ano: %s<br>Extensão: %s metros", # ver o pq do %s ou %g: https://rdrr.io/r/base/sprintf.html
+                                   CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
+                                   CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
+                                   CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
+                                   round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"] *1000)) |> #em metros 
+                     lapply(htmltools::HTML),
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
@@ -169,7 +183,13 @@ server = function(input, output) {
                    opacity = 1,
                    smoothFactor = 1, 
                    options = pathOptions(pane = "abaixo"),
-                   popup = ~DESIGNACAO,
+                   label = ~DESIGNACAO,
+                   popup = sprintf("<strong>%s</strong><br>%s<br>Ano: %s<br>Extensão: %s metros", # ver o pq do %s ou %g: https://rdrr.io/r/base/sprintf.html
+                                   CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
+                                   CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
+                                   CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
+                                   round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"] *1000)) |> #em metros 
+                     lapply(htmltools::HTML),
                    group = "Percurso Ciclo-pedonal")
     
   })
