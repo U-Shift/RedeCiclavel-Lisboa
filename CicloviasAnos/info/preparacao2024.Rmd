@@ -165,7 +165,7 @@ Todas as ciclovias que existem ou existiram no server da CML
 ```{r eval=FALSE}
 mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=F, legend=T)
 ```
-![](figs/todas_pratanaodedicada.png)
+![](figs/todas.png)
 
 ### Remover ciclovias que desapareceram entretanto
 
