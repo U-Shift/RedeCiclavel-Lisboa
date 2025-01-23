@@ -291,11 +291,12 @@ server = function(input, output) {
     datatable(data_table,
               width = "100%",
               caption = "Extensão da rede ciclável em Lisboa por ano e tipologia [km]",
-              extensions = "Buttons",
+              extensions = c("Buttons", "FixedColumns"),
               options = list(ordering = FALSE, # Disable ordering
                              dom = 'tB', # Only show table and buttons
                              digits = 1,
                              scrollX = TRUE, # Enable horizontal scrolling
+                             fixedColumns = list(leftColumns = 1), # a primeia é o rownames
                              # autoWidth = TRUE, # Automatically adjust column widths
                              buttons = "excel"), # Add buttons to export table
               rownames = FALSE) # Remove row numbers
