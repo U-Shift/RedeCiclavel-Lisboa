@@ -23,8 +23,8 @@ addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/in
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
                      min(CICLOVIAS$AnoT, na.rm = t),
                      max(CICLOVIAS$AnoT, na.rm = t),
-                     selected = "2012",
-                     choices = as.character(seq(2001,2023)),
+                     selected = "2013",
+                     choices = as.character(seq(2001,2024)),
                    # sep = "",
                    # grid = T,
                      animate = animationOptions(interval = 2002),
@@ -37,7 +37,8 @@ nada = column(1, offset = 0, style="padding:0px;")
 kilometros = column(2, 
                     tags$h4("Extensão da rede"),
                     tags$h5(textOutput("kmsciclovias")),
-                    tags$h5(textOutput("kmsoutras"))
+                    tags$h5(textOutput("kmsoutras")),
+                    tags$h5(textOutput("kmspedonal"))
                     #converter para tabela?
                     )
 
@@ -74,7 +75,7 @@ ui =
             h2("Evolução da rede ciclável em Lisboa"),
             br(),
             fluidRow(column(8, offset = 3,
-            img(src = "gif/RedeCiclavelLisboa2023.gif", align = "center",height="500px") 
+            img(src = "gif/RedeCiclavelLisboa2024.gif", align = "center",height="500px") 
             #tags$video(src = "gif/RedeCiclavelLisboa2020.mp4", align = "center",height="500px")
                 ))
             ),
@@ -96,7 +97,7 @@ ui =
           
               tabPanel("Processamento dos dados",
                      #  uiOutput("preparacao")
-                       includeMarkdown("info/preparacao2023.Rmd")
+                       includeMarkdown("info/preparacao2024.Rmd")
                      # includeHTML("info/preparacao2.html")
                       ),
               
@@ -181,6 +182,10 @@ server = function(input, output) {
   output$kmsoutras <- renderText({
     paste0("30+Bici ou Não dedicada: ",
            QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Nao dedicada"])
+  })
+  output$kmspedonal <- renderText({
+    paste0("Ciclo-pedonal: ",
+           QUILOMETROS$Kms[QUILOMETROS$AnoT == input$Ano & QUILOMETROS$TIPOLOGIA == "Percurso Ciclo-pedonal"])
   })
   
   #gráfico
