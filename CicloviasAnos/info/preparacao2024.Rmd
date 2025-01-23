@@ -196,6 +196,21 @@ neptuno_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(1032)) |> mutat
                                                        
 
 Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_id)) |> rbind(neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24)
+
+neptuno_musas_id = 1966
+neptuno_musas1_24 = Ciclovias_corrigir_trocos %>% filter(id == 1966)
+neptuno_musas2_24 = Ciclovias_corrigir_trocos %>% filter(id == 9300)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_musas_id)) |> rbind(neptuno_musas1_24, neptuno_musas2_24)
+
+neptuno_oceanos_id = c(95,99,103,1872,744,745,746,1965)
+neptuno_oceanos_21 = Ciclovias_corrigir_trocos %>% filter(id == 744)
+neptuno_oceanos_22 = Ciclovias_corrigir_trocos %>% filter(id == 744) |> mutate(AnoT = 2022)
+neptuno_oceanos_23 = Ciclovias_corrigir_trocos %>% filter(id == 744) |> mutate(AnoT = 2023)
+neptuno_oceanos_24 = Ciclovias_corrigir_trocos %>% filter(id == 744) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_oceanos_id)) |> rbind(neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24)
+ 
 ```
 
 #### Praça de Londres
@@ -259,7 +274,7 @@ Ciclovias = Ciclovias %>% filter(!(id %in% espanha3_id)) |> rbind(espanha3_novo_
 ```
 
 ```{r eval=FALSE, include=FALSE}
-rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24, espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24)
+rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, neptuno_musas1_24, neptuno_musas2_24, neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24, londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24, espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24)
 ```
 
 
@@ -268,6 +283,10 @@ rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id,
 # Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Avenida de Berna" & AnoT == 2024)) # Av berna todas
 # Ciclovias = Ciclovias %>% filter(!(DESIGNACAO == "Praça Espanha" & AnoT == 2024 & ANO == 2021)) # Pç espanha ligacao
 #as novas configurações da Pc Espanha já vinham no ficheiro avberna_2024
+
+# remover ligação Neptuno que afainal não existe (issue #20)
+Ciclovias = Ciclovias %>% filter(!DESIGNACAO == "Ligação Neptuno") #id 2156
+
 ```
 
 ### Confirmar mapa actual
