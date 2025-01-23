@@ -10,6 +10,7 @@ library(plotly)
 library(units)
 library(rmarkdown)
 library(knitr)
+library(DT)
 #library(htmltools)
 
 
@@ -59,7 +60,14 @@ ui =
     tags$head(
       tags$script(src = 'highlight.pack.js'),
       tags$script(src = 'shiny-showcase.js'),
-      tags$link(rel = "stylesheet", type = "text/css", href = "rstudio.css")
+      tags$style(HTML("
+      #km_table {
+        position: relative;  /* Ensures it's part of the normal page flow */
+        width: 100%;  /* Make sure it fills the available space */
+      }
+    ")),
+      tags$link(rel = "stylesheet", type = "text/css", href = "rstudio.css"),
+      tags$link(rel = "stylesheet", type = "text/css", href = "https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css")  # Add DataTables CSS
     ),
     
     navbarPage("Ciclovias em Lisboa",
@@ -93,6 +101,9 @@ ui =
             br(),
             br(),
             h5("Nota: É possível esconder ou mostrar tipologias clicando no item da legenda."),
+            h5("As Não dedicadas são essencialmente 30+bici"),
+            
+            DTOutput("km_table")  # Add a table below the plot
             ),
    
    tabPanel("Sobre",icon = icon("info"),
@@ -259,6 +270,28 @@ server = function(input, output) {
   output$grafico <- renderPlotly({grafico
    
     })
+  
+  # tabela com os quilómetros por ano e tipologia
+  output$km_table <- renderDT({
+    data_table <- QUILOMETROS %>%
+      mutate(Kms = units::drop_units(lenght) |> round(digits = 1)) |> 
+      select(AnoT, TIPOLOGIA, Kms) |> 
+      pivot_wider(names_from = AnoT, values_from = Kms)
+    data_table[data_table == 0] = NA
+    
+    # Render the table
+    datatable(data_table,
+              width = "100%",
+              caption = "Extensão da rede ciclável em Lisboa por ano e tipologia [km]",
+              extensions = "Buttons",
+              options = list(ordering = FALSE, # Disable ordering
+                             dom = 'tB', # Only show table and buttons
+                             digits = 1,
+                             scrollX = TRUE, # Enable horizontal scrolling
+                             autoWidth = TRUE, # Automatically adjust column widths
+                             buttons = "excel"), # Add buttons to export table
+              rownames = FALSE) # Remove row numbers
+  })
   
   #markdown dos códigos
   # output$preparacao <- renderUI({
