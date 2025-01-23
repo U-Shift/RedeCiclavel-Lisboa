@@ -169,6 +169,7 @@ server = function(input, output) {
                                    CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
                                    round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"] *1000)) |> #em metros 
                      lapply(htmltools::HTML),
+                   highlightOptions = highlightOptions(color = "#1A7832", weight = 5, opacity = 0.7, bringToFront = TRUE),
                    group = "Ciclovias") %>% 
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Nao dedicada", ],
@@ -184,6 +185,7 @@ server = function(input, output) {
                                    CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
                                    round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"] *1000)) |> #em metros 
                      lapply(htmltools::HTML),
+                   highlightOptions = highlightOptions(color = "#AFD4A0", weight = 5, fillOpacity = 0.7, bringToFront = TRUE),
                    group = "30+Bici ou Não dedicada")%>%
       addPolylines(data = CICLOVIAS[CICLOVIAS$AnoT == input$Ano &
                                       CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal", ],
@@ -200,6 +202,7 @@ server = function(input, output) {
                                    CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
                                    round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"] *1000)) |> #em metros 
                      lapply(htmltools::HTML),
+                   highlightOptions = highlightOptions(color = "#AFD4A0", weight = 5, dashArray = 10, bringToFront = TRUE),
                    group = "Percurso Ciclo-pedonal")
     
   })
