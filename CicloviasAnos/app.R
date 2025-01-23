@@ -276,7 +276,7 @@ server = function(input, output) {
     data_table <- QUILOMETROS %>%
       mutate(Kms = units::drop_units(lenght) |> round(digits = 1)) |> 
       select(AnoT, TIPOLOGIA, Kms) |> 
-      pivot_wider(names_from = AnoT, values_from = Kms)
+      tidyr::pivot_wider(names_from = AnoT, values_from = Kms)
     
     total_row <- data_table %>% # Calculate the "Total" row
       select(-TIPOLOGIA) %>%
