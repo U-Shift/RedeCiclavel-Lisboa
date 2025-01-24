@@ -138,6 +138,12 @@ Ciclovias2024_outrasanteriores2_19_22 = Ciclovias2024_outrasanteriores2 |> filte
 Ciclovias2024_outrasanteriores2_19_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2023)
 Ciclovias2024_outrasanteriores2_19_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2024)
 
+Ciclovias2024_outrasanteriores2_20_20 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2020") |> mutate(AnoT = 2020)
+Ciclovias2024_outrasanteriores2_20_21 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2020") |> mutate(AnoT = 2021)
+Ciclovias2024_outrasanteriores2_20_22 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2020") |> mutate(AnoT = 2022)
+Ciclovias2024_outrasanteriores2_20_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2020") |> mutate(AnoT = 2023)
+Ciclovias2024_outrasanteriores2_20_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2020") |> mutate(AnoT = 2024)
+
 Ciclovias2024_outrasanteriores2_21_21 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2021)
 Ciclovias2024_outrasanteriores2_21_22 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2022)
 Ciclovias2024_outrasanteriores2_21_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2023)
@@ -147,11 +153,11 @@ Ciclovias2024_outrasanteriores2_22_22 = Ciclovias2024_outrasanteriores2 |> filte
 Ciclovias2024_outrasanteriores2_22_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2023)
 Ciclovias2024_outrasanteriores2_22_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2024)
 
-Ciclovias2024_outrasanteriores2_24 = rbind(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24) |> 
+Ciclovias2024_outrasanteriores2_24 = rbind(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24) |> 
   mutate(lenght = st_length(geom) %>% units::set_units(km))
 
 # limpar
-rm(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24)
+rm(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24)
 rm(Ciclovias2024_outrasanteriores2)
 ```
 
