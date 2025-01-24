@@ -220,10 +220,10 @@ Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_oceanos_id)) |> rbind(neptuno
 #### Praça de Londres
 
 ```{r eval=FALSE}
-londres1_id = c(1046:1049, 2010)
-londres1_novo = Ciclovias_corrigir_trocos %>% filter(id %in% c(9100:9150))
-
-Ciclovias = Ciclovias %>% filter(!(id %in% londres1_id)) |> rbind(londres1_novo)
+# londres1_id = c(1146:1149, 2010)
+# londres1_novo = Ciclovias_corrigir_trocos %>% filter(id %in% c(9100:9150))
+# 
+# Ciclovias = Ciclovias %>% filter(!(id %in% londres1_id)) |> rbind(londres1_novo)
 
 londres2_id = c(274,275,276,278,280,282, 1896)
 londres2_novo_18 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200))
@@ -244,6 +244,22 @@ londres3_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(Ano
 londres3_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2024)
 
 Ciclovias = Ciclovias %>% filter(!(id %in% londres3_id)) |> rbind(londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24)
+
+```
+
+#### Av Paris
+
+```{r eval=FALSE}
+paris1_id = c(495:504, 1929,1930)
+paris1_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2019)
+paris1_novo_20 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2020)
+paris1_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2021)
+paris1_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2022)
+paris1_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2023)
+paris1_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9400:9404)) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% paris1_id)) |> rbind(paris1_novo_19, paris1_novo_20, paris1_novo_21, paris1_novo_22, paris1_novo_23, paris1_novo_24)
+
 ```
 
 #### Praça de Espanha
