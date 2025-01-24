@@ -335,3 +335,11 @@ saveRDS(CicloviasKM, "CicloviasAnos/CicloviasKM.Rds")
 st_write(Ciclovias |> select(-id), "data/Ciclovias_dez2024_CORRECT.gpkg", delete_dsn = TRUE)
 ```
 
+```{r}
+# Exportar rede separada por anos
+for (i in unique(Ciclovias$AnoT)){
+  CicloviasAno = Ciclovias %>% filter(AnoT == i)
+  st_write(CicloviasAno, paste0("data/Ciclovias por ano/Ciclovias_",i,".gpkg"), delete_dsn = TRUE)
+}
+```
+
