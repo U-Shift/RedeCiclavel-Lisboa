@@ -47,11 +47,13 @@ Adicionar as novas que não estavam na shp anterior de Dez 2023.
 #### Remover os que estão a mais
 
 ```{r eval=FALSE}
+CicloviasCMLanteriores = Ciclovias2024 %>% filter(ANO %in% c("2019", "2020", "2021", "2022"))
 #filtrar só últimos anos
 Ciclovias2024 = Ciclovias2024 %>% filter(ANO %in% c("2023", "2024"))
 # atenção que há umas que vêm da CML que não têm ano atribuído!
 
 #exportar e abrir no sig
+st_write(CicloviasCMLanteriores, "data/Cicloviaspre22_dez_cml.gpkg", delete_dsn = TRUE)
 st_write(Ciclovias2024, "data/Ciclovias2024_dez_cml.gpkg", delete_dsn = TRUE)
 ```
 
@@ -115,26 +117,44 @@ Ciclovias2024_outrasanteriores = Ciclovias2024_outrasanteriores |>
 Ciclovias2024_new = rbind(Ciclovias2024_new, Ciclovias2024_outrasanteriores)
 ```
 
-#### Reclassificar ciclovias
-Em __dedicadas__ (uni e bi-direccionais, pistas cicláveis) e __não-dedicadas__ (30+bici, zona de coexistência), e __percursos em coexistência com o peão__ (ciclo-pedonal)
-```{r eval=FALSE}
-table(Ciclovias2024_new$TIPOLOGIA)
-Ciclovias2024_new$TIPOLOGIA = as.character(Ciclovias2024_new$TIPOLOGIA)
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Percurso Ciclopedonal"] = "Percurso Ciclo-pedonal"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista Ciclável Unidirecional"] = "Ciclovia dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Pista ciclável (ciclovia)"] = "Ciclovia dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Contrassentido"] = "Ciclovia dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Faixa Ciclável"] = "Ciclovia dedicada"
+# Mais umas anteriores a 2023
 
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
-Ciclovias2024_new$TIPOLOGIA[Ciclovias2024_new$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
+Que faltavam. Só estão aqui e não no cap anterior por causa dos ids (não baralhar o trabalho já feito)
 
-#factor tipologia
-Ciclovias2024_new = Ciclovias2024_new |> mutate(TIPOLOGIA = factor(TIPOLOGIA))
-table(Ciclovias2024_new$TIPOLOGIA)
+* Rua António Mega Ferreira
+* Rotunda Av de Pádua (2020)
+* 30+bici na Encarnação (2019)
+* Rua B Bairro da Liberdade (2019)
+* Estrada da Pontinha / Francisco Gama Caeiro (2022)
+* Troço novo na ribeirinha (2021)
+
+```{r}
+Ciclovias2024_outrasanteriores2 = st_read("data/outras_anteriores24.gpkg")
+# duplicar para os anos seguintes
+Ciclovias2024_outrasanteriores2_19_19 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2019)
+Ciclovias2024_outrasanteriores2_19_20 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2020)
+Ciclovias2024_outrasanteriores2_19_21 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2021)
+Ciclovias2024_outrasanteriores2_19_22 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2022)
+Ciclovias2024_outrasanteriores2_19_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2023)
+Ciclovias2024_outrasanteriores2_19_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2019") |> mutate(AnoT = 2024)
+
+Ciclovias2024_outrasanteriores2_21_21 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2021)
+Ciclovias2024_outrasanteriores2_21_22 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2022)
+Ciclovias2024_outrasanteriores2_21_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2023)
+Ciclovias2024_outrasanteriores2_21_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2021") |> mutate(AnoT = 2024)
+
+Ciclovias2024_outrasanteriores2_22_22 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2022)
+Ciclovias2024_outrasanteriores2_22_23 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2023)
+Ciclovias2024_outrasanteriores2_22_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2024)
+
+Ciclovias2024_outrasanteriores2_24 = rbind(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24) |> 
+  mutate(lenght = st_length(geom) %>% units::set_units(km))
+
+# limpar
+rm(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24)
+rm(Ciclovias2024_outrasanteriores2)
 ```
+
 
 #### Juntar novamente com as anteriores
 ```{r eval=FALSE}
@@ -144,6 +164,7 @@ CicloviasAnteriores = rbind(CicloviasAnteriores, CicloviasAnteriores_24)
 
 #juntar
 Ciclovias = bind_rows(CicloviasAnteriores, Ciclovias2024_new)
+Ciclovias = bind_rows(Ciclovias, Ciclovias2024_outrasanteriores2_24)
 
 #remover duplicados
 Ciclovias = distinct(Ciclovias)
@@ -158,6 +179,29 @@ sum(Ciclovias$lenght[Ciclovias$AnoT==2024]) #extensão da rede actual
 # calma, há segmentos que foram destruídos entretanto
 # exportar e corrigig no sig
 # st_write(Ciclovias, "data/Ciclovias2024_corrigir.gpkg", delete_dsn = TRUE)
+```
+
+
+
+#### Reclassificar ciclovias
+Em __dedicadas__ (uni e bi-direccionais, pistas cicláveis) e __não-dedicadas__ (30+bici, zona de coexistência), e __percursos em coexistência com o peão__ (ciclo-pedonal)
+```{r eval=FALSE}
+table(Ciclovias$TIPOLOGIA)
+Ciclovias$TIPOLOGIA = as.character(Ciclovias$TIPOLOGIA)
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Percurso Ciclopedonal"] = "Percurso Ciclo-pedonal"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclavel Bidirecional"] = "Ciclovia dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclável Bidirecional"] = "Ciclovia dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista Ciclável Unidirecional"] = "Ciclovia dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Pista ciclável (ciclovia)"] = "Ciclovia dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Contrassentido"] = "Ciclovia dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Faixa Ciclável"] = "Ciclovia dedicada"
+
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="30+Bici"] = "Nao dedicada"
+Ciclovias$TIPOLOGIA[Ciclovias$TIPOLOGIA=="Zona de Coexistência"] = "Nao dedicada"
+
+#factor tipologia
+Ciclovias = Ciclovias |> mutate(TIPOLOGIA = factor(TIPOLOGIA))
+table(Ciclovias$TIPOLOGIA)
 ```
 
 ### Ver num mapa
