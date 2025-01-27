@@ -57,4 +57,4 @@ Resultado em
 src="images/clipboard-663169356.png" /></figcaption>
 </figure>
 
-![](images/clipboard-2347761711.png)
+![](images/clipboard-2113211100.png)
