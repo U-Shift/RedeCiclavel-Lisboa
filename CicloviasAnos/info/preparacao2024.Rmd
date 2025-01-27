@@ -498,6 +498,8 @@ saveRDS(CicloviasKM, "CicloviasAnos/CicloviasKM.Rds")
 
 ```{r}
 st_write(Ciclovias |> select(-id), "data/Ciclovias_dez2024_CORRECT.gpkg", delete_dsn = TRUE)
+st_write(Ciclovias, "data/Ciclovias_dez2024_CORRECT_id.gpkg", delete_dsn = TRUE)
+saveRDS(Ciclovias, "data/Ciclovias_bk24.Rds")
 ```
 
 ```{r}
