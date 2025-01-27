@@ -31,7 +31,7 @@ O processo envolve limpeza, remoção de repetidos, reclassifiação de
 tipologia, tratamento especial de segmentos que foram alterados ao longo
 dos anos.
 
-> Última atualização a 23.Janeiro.2025
+> Última atualização a 27.Janeiro.2025
 
 ## GIF com evolução
 
@@ -57,4 +57,4 @@ Resultado em
 src="images/clipboard-663169356.png" /></figcaption>
 </figure>
 
-![](images/clipboard-2792216564.png)
+![](images/clipboard-2347761711.png)

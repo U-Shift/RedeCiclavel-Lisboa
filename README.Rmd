@@ -32,7 +32,7 @@ CicloviasATUAL24 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arc
 
 O processo envolve limpeza, remoção de repetidos, reclassifiação de tipologia, tratamento especial de segmentos que foram alterados ao longo dos anos.
 
-> Última atualização a 23.Janeiro.2025
+> Última atualização a 27.Janeiro.2025
 
 ## GIF com evolução
 
@@ -48,4 +48,4 @@ Resultado em [ushift.rosafelix.bike/shiny/ciclovias](https://ushift.rosafelix.bi
 
 ![![](images/clipboard-663169356.png)](images/clipboard-2333512650.png)
 
-![](images/clipboard-2792216564.png)
+![](images/clipboard-2347761711.png)
