@@ -214,6 +214,14 @@ neptuno_oceanos_23 = Ciclovias_corrigir_trocos %>% filter(id == 744) |> mutate(A
 neptuno_oceanos_24 = Ciclovias_corrigir_trocos %>% filter(id == 744) |> mutate(AnoT = 2024)
 
 Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_oceanos_id)) |> rbind(neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24)
+
+neptuno_ligacao_id = 9301
+neptuno_ligacao_21 = Ciclovias_corrigir_trocos %>% filter(id == 9301) |> mutate(AnoT = 2021)
+neptuno_ligacao_22 = Ciclovias_corrigir_trocos %>% filter(id == 9301) |> mutate(AnoT = 2022)
+neptuno_ligacao_23 = Ciclovias_corrigir_trocos %>% filter(id == 9301) |> mutate(AnoT = 2023)
+neptuno_ligacao_24 = Ciclovias_corrigir_trocos %>% filter(id == 9301) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias |> rbind(neptuno_ligacao_21, neptuno_ligacao_22, neptuno_ligacao_23, neptuno_ligacao_24)
  
 ```
 
@@ -337,9 +345,10 @@ Ciclovias = Ciclovias %>% filter(!(id %in% pardal_id)) |> rbind(pardal_novo_21, 
 
 
 ```{r eval=FALSE, include=FALSE}
-rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, combatentes_id, campolide_id, pardal_id,
+rm(Ciclovias_corrigir_trocos, neptuno_id, neptuno_ligacao_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, combatentes_id, campolide_id, pardal_id,
 neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, neptuno_musas1_24, neptuno_musas2_24,
 neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24,
+neptuno_ligacao_21, neptuno_ligacao_22, neptuno_ligacao_23, neptuno_ligacao_24,
 londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24,
 espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24, 
 combatentes_novo_21, combatentes_novo_22, combatentes_novo_23, combatentes_novo_24,
