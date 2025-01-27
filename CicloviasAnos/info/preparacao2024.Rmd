@@ -225,6 +225,10 @@ Ciclovias = Ciclovias %>% filter(!(id %in% neptuno_oceanos_id)) |> rbind(neptuno
 # 
 # Ciclovias = Ciclovias %>% filter(!(id %in% londres1_id)) |> rbind(londres1_novo)
 
+# Ciclovias = Ciclovias |> filter(!(id %in% c(9100:9150))) # Praça de Londres afinal estava bem
+# londres1_velho = Ciclovias |> filter(id == 1149) |> mutate(AnoT = 2024)
+# Ciclovias = Ciclovias |> rbind(londres1_velho)
+
 londres2_id = c(274,275,276,278,280,282, 1896)
 londres2_novo_18 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200))
 londres2_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(274, 9200)) |> mutate(AnoT = 2019)
@@ -244,6 +248,7 @@ londres3_novo_23 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(Ano
 londres3_novo_24 = Ciclovias_corrigir_trocos %>% filter(id == 287) |> mutate(AnoT = 2024)
 
 Ciclovias = Ciclovias %>% filter(!(id %in% londres3_id)) |> rbind(londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24)
+
 
 ```
 
@@ -392,7 +397,8 @@ Ciclovias2024_outrasanteriores2_22_23 = Ciclovias2024_outrasanteriores2 |> filte
 Ciclovias2024_outrasanteriores2_22_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2024)
 
 Ciclovias2024_outrasanteriores2_24 = rbind(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24) |> 
-  mutate(lenght = st_length(geom) %>% units::set_units(km))
+  mutate(lenght = st_length(geom) %>% units::set_units(km)) |> 
+  mutate(id = 4000 + as.integer(row.names(.)) # atribuir id
 
 # limpar
 rm(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24)
