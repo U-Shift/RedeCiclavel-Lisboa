@@ -317,9 +317,30 @@ Ciclovias = Ciclovias %>% filter(!(id %in% campolide_id)) |> rbind(campolide_nov
 ```
 
 
+#### Rua Pardal Monteiro
+
+```{r eval=FALSE}
+pardal_id = c(366:368, 1342:1344, 1489,1491,1493,1912,2046,2076)
+pardal_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9600:9605)) |> mutate(AnoT = 2021)
+pardal_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9600:9605)) |> mutate(AnoT = 2022)
+pardal_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9600:9605)) |> mutate(AnoT = 2023)
+pardal_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9600:9605)) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% pardal_id)) |> rbind(pardal_novo_21, pardal_novo_22, pardal_novo_23, pardal_novo_24)
+```
+
+
 
 ```{r eval=FALSE, include=FALSE}
-rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, combatentes_id, neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, neptuno_musas1_24, neptuno_musas2_24, neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24, londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24, espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24)
+rm(Ciclovias_corrigir_trocos, neptuno_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, combatentes_id, campolide_id, pardal_id,
+neptuno_novo_10, neptuno_novo_11, neptuno_novo_12, neptuno_novo_13, neptuno_novo_14, neptuno_novo_15, neptuno_novo_16, neptuno_novo_17, neptuno_novo_18, neptuno_novo_19, neptuno_novo_20, neptuno_novo_21, neptuno_novo_22, neptuno_novo_23, neptuno_novo_24, neptuno_musas1_24, neptuno_musas2_24,
+neptuno_oceanos_21, neptuno_oceanos_22, neptuno_oceanos_23, neptuno_oceanos_24,
+londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_novo_21, londres2_novo_22, londres2_novo_23, londres2_novo_24, londres3_novo_20, londres3_novo_21, londres3_novo_22, londres3_novo_23, londres3_novo_24,
+espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24, 
+combatentes_novo_21, combatentes_novo_22, combatentes_novo_23, combatentes_novo_24,
+campolide_novo_19, campolide_novo_20, campolide_novo_21, campolide_novo_22, campolide_novo_23, campolide_novo_24, 
+pardal_novo_21, pardal_novo_22, pardal_novo_23, pardal_novo_24)
+
 ```
 
 
