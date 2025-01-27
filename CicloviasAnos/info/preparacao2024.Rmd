@@ -397,8 +397,9 @@ Ciclovias2024_outrasanteriores2_22_23 = Ciclovias2024_outrasanteriores2 |> filte
 Ciclovias2024_outrasanteriores2_22_24 = Ciclovias2024_outrasanteriores2 |> filter(ANO == "2022") |> mutate(AnoT = 2024)
 
 Ciclovias2024_outrasanteriores2_24 = rbind(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24) |> 
-  mutate(lenght = st_length(geom) %>% units::set_units(km)) |> 
-  mutate(id = 4000 + as.integer(row.names(.)) # atribuir id
+  mutate(lenght = st_length(geom) %>% units::set_units(km))
+Ciclovias2024_outrasanteriores2_24 = Ciclovias2024_outrasanteriores2_24 |> 
+  mutate(id = 4000 + as.integer(row.names(Ciclovias2024_outrasanteriores2_24))) # atribuir id
 
 # limpar
 rm(Ciclovias2024_outrasanteriores2_19_19, Ciclovias2024_outrasanteriores2_19_20, Ciclovias2024_outrasanteriores2_19_21, Ciclovias2024_outrasanteriores2_19_22, Ciclovias2024_outrasanteriores2_19_23, Ciclovias2024_outrasanteriores2_19_24, Ciclovias2024_outrasanteriores2_20_20, Ciclovias2024_outrasanteriores2_20_21, Ciclovias2024_outrasanteriores2_20_22, Ciclovias2024_outrasanteriores2_20_23, Ciclovias2024_outrasanteriores2_20_24, Ciclovias2024_outrasanteriores2_21_21, Ciclovias2024_outrasanteriores2_21_22, Ciclovias2024_outrasanteriores2_21_23, Ciclovias2024_outrasanteriores2_21_24, Ciclovias2024_outrasanteriores2_22_22, Ciclovias2024_outrasanteriores2_22_23, Ciclovias2024_outrasanteriores2_22_24)
@@ -441,6 +442,9 @@ mapview(cic24, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=F, legend=T)
 
 ### Adicionar contador de km
 ```{r eval=FALSE}
+# recalcular extensão
+Ciclovias$lenght = st_length(Ciclovias) %>% units::set_units(km)
+
 #Adicionar campo com extensão da rede acumulada
 CicloviasKM = Ciclovias %>% select(AnoT, lenght, TIPOLOGIA) %>% st_drop_geometry()
 
