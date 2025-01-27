@@ -302,6 +302,19 @@ Ciclovias = Ciclovias %>% filter(!(id %in% combatentes_id))
 ```
 
 
+#### Campolide
+
+```{r eval=FALSE}
+campolide_id = c(636:640,1950)
+campolide_novo_19 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507)) |> mutate(AnoT = 2019)
+campolide_novo_20 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507)) |> mutate(AnoT = 2020)
+campolide_novo_21 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507)) |> mutate(AnoT = 2021)
+campolide_novo_22 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507, 9500)) |> mutate(AnoT = 2022)
+campolide_novo_23 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507, 9500)) |> mutate(AnoT = 2023)
+campolide_novo_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9502:9507, 9500)) |> mutate(AnoT = 2024)
+
+Ciclovias = Ciclovias %>% filter(!(id %in% campolide_id)) |> rbind(campolide_novo_19, campolide_novo_20, campolide_novo_21, campolide_novo_22, campolide_novo_23, campolide_novo_24)
+```
 
 
 
