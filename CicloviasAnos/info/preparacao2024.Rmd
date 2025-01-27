@@ -343,6 +343,13 @@ Ciclovias = Ciclovias %>% filter(!(id %in% pardal_id)) |> rbind(pardal_novo_21, 
 ```
 
 
+### Salgado Zenha
+
+```{r}
+zalgado_24 = Ciclovias_corrigir_trocos %>% filter(id %in% c(9700, 9701))
+Ciclovias = Ciclovias |> rbind(zalgado_24)
+```
+
 
 ```{r eval=FALSE, include=FALSE}
 rm(Ciclovias_corrigir_trocos, neptuno_id, neptuno_ligacao_id, londres1_id, londres2_id, londres3_id, espanha1_id, espanha2_id, espanha3_id, combatentes_id, campolide_id, pardal_id,
@@ -353,7 +360,8 @@ londres1_novo, londres2_novo_18, londres2_novo_19, londres2_novo_20, londres2_no
 espanha1_novo_20, espanha1_novo_21, espanha1_novo_22, espanha1_novo_23, espanha1_novo_24, espanha2_novo_20, espanha2_novo_21, espanha2_novo_22, espanha2_novo_23, espanha2_novo_24, espanha3_novo_21, espanha3_novo_22, espanha3_novo_23, espanha3_novo_24, 
 combatentes_novo_21, combatentes_novo_22, combatentes_novo_23, combatentes_novo_24,
 campolide_novo_19, campolide_novo_20, campolide_novo_21, campolide_novo_22, campolide_novo_23, campolide_novo_24, 
-pardal_novo_21, pardal_novo_22, pardal_novo_23, pardal_novo_24)
+pardal_novo_21, pardal_novo_22, pardal_novo_23, pardal_novo_24,
+zalgado_24)
 
 ```
 
@@ -449,7 +457,7 @@ cic24=Ciclovias[Ciclovias$AnoT==2024,]
 # greens3 = cartography::carto.pal(pal1 = "green.pal", 3)
 # greens3 = rev(greens3)
 greens3 = c("#197230", "#5A9C50", "#B2D6A3")
-mapview(cic24, zcol="TIPOLOGIA", color = greens3, lwd=1.5, hide=F, legend=T)
+mapview(cic24, zcol="TIPOLOGIA", color = greens3, lwd=2, hide=F, legend=T)
 ```
 ![](figs/tipologia24.png)
 
