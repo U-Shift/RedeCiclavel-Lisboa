@@ -367,6 +367,10 @@ pardal_novo_21, pardal_novo_22, pardal_novo_23, pardal_novo_24)
 # remover ligação Neptuno que afainal não existe (issue #20)
 Ciclovias = Ciclovias %>% filter(!DESIGNACAO == "Ligação Neptuno") #id 2156
 
+# Alterar nome do final da Rua das Musas
+Ciclovias$DESIGNACAO[2095] = "Rua das Musas"
+Ciclovias = Ciclovias[-2094,] # o troço dedicado não existia
+
 ```
 
 # Mais umas anteriores a 2023
