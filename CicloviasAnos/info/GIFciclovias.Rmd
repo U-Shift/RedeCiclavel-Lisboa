@@ -131,10 +131,10 @@ Para guardar cada imagem em separado
 ```
 Duplicar o último frame para ficar parado mais tempo no final.
 
-E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, por exemplo.
+<!-- E depois usar um [gifmaker.me](https://gifmaker.me) com 0.6 seg de intervalo, por exemplo. -->
 
 
-#### Ou gravar logo como gif
+#### Gravar como gif
 
 ```{r}
 library(magick)
