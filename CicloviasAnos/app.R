@@ -23,8 +23,8 @@ addResourcePath(prefix = "info", directoryPath = "/srv/shiny-server/ciclovias/in
 
 # conteúdo da parte de cima do mapa
 slider = column(9,shinyWidgets::sliderTextInput(inputId = "Ano", "Ano:", 
-                     min(CICLOVIAS$AnoT, na.rm = t),
-                     max(CICLOVIAS$AnoT, na.rm = t),
+                     min(CICLOVIAS$AnoT, na.rm = TRUE),
+                     max(CICLOVIAS$AnoT, na.rm = TRUE),
                      selected = "2013",
                      choices = as.character(seq(2001,2024)),
                    # sep = "",
