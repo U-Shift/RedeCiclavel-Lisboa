@@ -37,14 +37,14 @@ O processo envolve limpeza, remoção de repetidos, reclassifiação de tipologi
 ## GIF com evolução
 
 [Ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/GIFciclovias.Rmd), usando a informação processada aqui.\
-Resultado em [RedeCiclavelLisboa2024.gif](https://ushift.rosafelix.bike/shiny/ciclovias/gif/RedeCiclavelLisboa2024.gif)
+Resultado em [RedeCiclavelLisboa2024.gif](https://server.ushift.pt/shiny/ciclovias/gif/RedeCiclavelLisboa2024.gif)
 
 ![](CicloviasAnos/info/figs/tipologia24.png)
 
 ## Mapa interactivo por anos
 
 [ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/CicloviasAnos/app.R), usando a informação processada aqui.\
-Resultado em [ushift.rosafelix.bike/shiny/ciclovias](https://ushift.rosafelix.bike/shiny/ciclovias)
+Resultado em [server.ushift.pt/shiny/ciclovias](https://server.ushift.pt/shiny/ciclovias)
 
 ![![](images/clipboard-663169356.png)](images/clipboard-2333512650.png)
 
