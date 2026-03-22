@@ -51,10 +51,8 @@ usando a informação processada aqui.
 Resultado em
 [ushift.rosafelix.bike/shiny/ciclovias](https://ushift.rosafelix.bike/shiny/ciclovias)
 
-<figure>
-<img src="images/clipboard-2333512650.png" alt="" />
-<figcaption aria-hidden="true"><img
-src="images/clipboard-663169356.png" /></figcaption>
-</figure>
+![](images/clipboard-2333512650.png)
+
+![](images/evolution2025.png)
 
 ![](images/clipboard-2113211100.png)
