@@ -21,8 +21,8 @@ slider <- column(9, shinyWidgets::sliderTextInput(
   inputId = "Ano", "Ano:",
   min(CICLOVIAS$AnoT, na.rm = TRUE),
   max(CICLOVIAS$AnoT, na.rm = TRUE),
-  selected = "2013",
-  choices = as.character(seq(2001, 2024)),
+  selected = "2025",
+  choices = as.character(seq(2001, 2025)),
   # sep = "",
   # grid = T,
   animate = animationOptions(interval = 2002),
@@ -82,7 +82,7 @@ ui <-
         br(),
         fluidRow(column(8,
           offset = 3,
-          img(src = "gif/RedeCiclavelLisboa2024.gif", align = "center", height = "500px")
+          img(src = "gif/RedeCiclavelLisboa2025.gif", align = "center", height = "500px")
           # tags$video(src = "gif/RedeCiclavelLisboa2020.mp4", align = "center",height="500px")
         ))
       ),
@@ -110,7 +110,7 @@ ui <-
         tabPanel(
           "Processamento dos dados",
           #  uiOutput("preparacao")
-          includeMarkdown("info/preparacao2024.Rmd")
+          includeMarkdown("info/preparacao2025.Rmd")
           # includeHTML("info/preparacao2.html")
         ),
         tabPanel(
@@ -267,7 +267,7 @@ server <- function(input, output) {
     geom_bar(stat = "identity") +
     guides(fill = guide_legend(reverse = TRUE), colour = guide_legend(reverse = TRUE)) +
     scale_fill_manual(values = c("#ebc0d4", "#AFD4A0", "#1A7832"), "Tipologia: ") +
-    scale_y_continuous(breaks = seq(0, 180, 20)) +
+    scale_y_continuous(breaks = seq(0, 240, 20)) +
     theme_minimal() +
     theme(
       axis.text.x = element_text(angle = 90, vjust = 0.5),
