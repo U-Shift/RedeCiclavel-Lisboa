@@ -20,32 +20,24 @@ A informação base está disponível no site de geodados da CML: <https://geoda
 
 # Processamento dos dados
 
-#### Importar rede ciclável
-
-```{r eval=FALSE}
-#actualizar para 2024 a partir do server da CML
-CicloviasATUAL24 = sf::st_read("https://services.arcgis.com/1dSrzEWVQn5kHHyK/arcgis/rest/services/Ciclovias/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson") 
-# infelixmente não têm os mesmos campos entre anos :(
-```
-
-#### Processo
+## Processo
 
 O processo envolve limpeza, remoção de repetidos, reclassifiação de tipologia, tratamento especial de segmentos que foram alterados ao longo dos anos.
 
-> Última atualização a 27.Janeiro.2025
+> Última atualização a 22.Março.2026
 
 ## GIF com evolução
 
 [Ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/GIFciclovias.Rmd), usando a informação processada aqui.\
-Resultado em [RedeCiclavelLisboa2024.gif](https://server.ushift.pt/shiny/ciclovias/gif/RedeCiclavelLisboa2024.gif)
+Resultado em [RedeCiclavelLisboa2025.gif](https://server.ushift.pt/shiny/ciclovias/gif/RedeCiclavelLisboa2025.gif)
 
-![](CicloviasAnos/info/figs/tipologia24.png)
+![](CicloviasAnos/info/figs/tipologia25.png)
 
 ## Mapa interactivo por anos
 
 [ver código](https://github.com/U-Shift/RedeCiclavel-Lisboa/blob/master/CicloviasAnos/app.R), usando a informação processada aqui.\
 Resultado em [server.ushift.pt/shiny/ciclovias](https://server.ushift.pt/shiny/ciclovias)
 
-![![](images/clipboard-663169356.png)](images/clipboard-2333512650.png)
+![](images/clipboard-2333512650.png)
 
 ![](images/clipboard-2113211100.png)
