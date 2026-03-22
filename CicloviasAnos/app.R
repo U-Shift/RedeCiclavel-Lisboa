@@ -44,8 +44,8 @@ kilometros <- column(
 # criar o rmd
 # rmarkdown::render(input = "info/preparacao.Rmd",
 #                   output_format = "html_document",
-#                   output_file = "/srv/shiny-server/ciclovias/info/preparacao.html")
-# xml2::write_html(rvest::html_node(xml2::read_html("/srv/shiny-server/ciclovias/info/preparacao.html"), "body"), file = "/srv/shiny-server/ciclovias/info/preparacao2.html")
+#                   output_file = "info/preparacao.html")
+# xml2::write_html(rvest::html_node(xml2::read_html("info/preparacao.html"), "body"), file = "info/preparacao2.html")
 
 # Define UI for application that draws a map
 # estrutura da página
@@ -180,7 +180,7 @@ server <- function(input, output) {
           CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
           CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
           CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"],
-          round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"] * 1000)
+          round(CICLOVIAS$length[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Ciclovia dedicada"] * 1000)
         ) |> # em metros
           lapply(htmltools::HTML),
         highlightOptions = highlightOptions(color = "#1A7832", weight = 5, opacity = 0.8, bringToFront = TRUE),
@@ -200,7 +200,7 @@ server <- function(input, output) {
           CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
           CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
           CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"],
-          round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"] * 1000)
+          round(CICLOVIAS$length[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Nao dedicada"] * 1000)
         ) |> # em metros
           lapply(htmltools::HTML),
         highlightOptions = highlightOptions(color = "#AFD4A0", weight = 5, bringToFront = TRUE),
@@ -221,7 +221,7 @@ server <- function(input, output) {
           CICLOVIAS$DESIGNACAO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
           CICLOVIAS$TIPOLOGIA[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
           CICLOVIAS$ANO[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"],
-          round(CICLOVIAS$lenght[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"] * 1000)
+          round(CICLOVIAS$length[CICLOVIAS$AnoT == input$Ano & CICLOVIAS$TIPOLOGIA == "Percurso Ciclo-pedonal"] * 1000)
         ) |> # em metros
           lapply(htmltools::HTML),
         highlightOptions = highlightOptions(color = "#AFD4A0", weight = 6, dashArray = 10, bringToFront = TRUE),
@@ -252,7 +252,7 @@ server <- function(input, output) {
   # gráfico
   # sem Ciclo-pedonal:
   # grafico = ggplot(QUILOMETROS[QUILOMETROS$TIPOLOGIA!="Percurso Ciclo-pedonal" & QUILOMETROS$Kms!="0 km",],
-  #         aes(factor(AnoT), drop_units(lenght), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia dedicada")))
+  #         aes(factor(AnoT), drop_units(length), fill=factor(TIPOLOGIA, levels=c("Nao dedicada","Ciclovia dedicada")))
   #         ) +
   #     geom_bar(stat="identity") +
   #     guides(fill=guide_legend(reverse=TRUE), colour=guide_legend(reverse=TRUE)) +
@@ -262,7 +262,7 @@ server <- function(input, output) {
   # com Ciclo-pedonal:
   grafico <- ggplot(
     QUILOMETROS[QUILOMETROS$Kms != "0 km", ],
-    aes(factor(AnoT), units::drop_units(lenght), fill = factor(TIPOLOGIA, levels = c("Percurso Ciclo-pedonal", "Nao dedicada", "Ciclovia dedicada")))
+    aes(factor(AnoT), units::drop_units(length), fill = factor(TIPOLOGIA, levels = c("Percurso Ciclo-pedonal", "Nao dedicada", "Ciclovia dedicada")))
   ) +
     geom_bar(stat = "identity") +
     guides(fill = guide_legend(reverse = TRUE), colour = guide_legend(reverse = TRUE)) +
@@ -293,7 +293,7 @@ server <- function(input, output) {
   # tabela com os quilómetros por ano e tipologia
   output$km_table <- renderDT({
     data_table <- QUILOMETROS |>
-      mutate(Kms = units::drop_units(lenght) |> round(digits = 1)) |>
+      mutate(Kms = units::drop_units(length) |> round(digits = 1)) |>
       select(AnoT, TIPOLOGIA, Kms) |>
       tidyr::pivot_wider(names_from = AnoT, values_from = Kms)
 
@@ -326,7 +326,7 @@ server <- function(input, output) {
 
   # markdown dos códigos
   # output$preparacao <- renderUI({
-  #   shiny::renderUI(includeHTML("/srv/shiny-server/ciclovias/info/preparacao2.html"))
+  #   shiny::renderUI(includeHTML("info/preparacao2.html"))
   #   })
 }
 
