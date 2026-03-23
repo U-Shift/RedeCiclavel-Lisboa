@@ -135,7 +135,7 @@ Duplicar o último frame para ficar parado mais tempo no final.
 #### Gravar como gif
 
 ```{sh}
-convert -delay 60 -loop 0 -resize 700x700 GIF/2025/*.png RedeCiclavelLisboa2025.gif
+convert -delay 60 -loop 0 -resize 700x700 GIF/2025/*.png GIF/RedeCiclavelLisboa2025.gif
 ```
 
 

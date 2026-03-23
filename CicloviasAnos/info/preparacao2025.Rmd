@@ -138,13 +138,13 @@ mapview::mapview(Ciclovias, zcol="TIPOLOGIA", lwd=1.5, hide=F, legend=T)
 ```
 ![](figs/todas.png)
 
-### Remover ciclovias que desapareceram entretanto
+## Atualizar troços de ciclovias
 
+- Atualizou-se a ciclovia da Av das Nações Unidas (cortada).
+- Marquês de Pombal passou a ter outra configuração em 2013.
+- 30+Bici no Bairro do Rego desde 2018
 
-Atualizou-se a ciclovia da Av das Nações Unidas (cortada).
-Marquês de Pombal passou a ter outra configuração em 2013.
-
-#### Av Nações Unidas
+### Av Nações Unidas
 
 ```{r eval=FALSE}
 Ciclovias_corrigir_trocos = st_read("data/Ciclovias2025_nacoesunidas.gpkg", layer="nacoesunidas")
@@ -189,8 +189,29 @@ Ciclovias = Ciclovias %>% filter(!(id %in% marques_id)) |> bind_rows(marques)
 ```
 
 
+### Bairro do Rego
+
+```{r}
+Ciclovias_corrigir_trocos = st_read("data/Ciclovias2025_corrigir.gpkg", layer = "ciclovias2025")
+rego_18 = Ciclovias_corrigir_trocos[483,]
+rego_18 = rego_18 |> mutate(AnoT = 2018, id = 9968, TIPOLOGIA = "Nao dedicada")
+rego_19 = rego_18 |> mutate(AnoT = 2019, id = 9969)
+rego_20 = rego_18 |> mutate(AnoT = 2020, id = 9970)
+rego_21 = rego_18 |> mutate(AnoT = 2021, id = 9971)
+rego_22 = rego_18 |> mutate(AnoT = 2022, id = 9972)
+rego_23 = rego_18 |> mutate(AnoT = 2023, id = 9973)
+rego_24 = rego_18 |> mutate(AnoT = 2024, id = 9974)
+rego_25 = rego_18 |> mutate(AnoT = 2025, id = 9975)
+rego = rbind(rego_18, rego_19, rego_20, rego_21, rego_22, rego_23, rego_24, rego_25)
+rego$length = st_length(rego) %>% units::set_units(km)
+
+Ciclovias = Ciclovias |> bind_rows(rego)
+```
+
+
 ```{r eval=FALSE, include=FALSE}
-rm(Ciclovias_corrigir_trocos, nacoes_novo_25, marques_13, marques_14, marques_15, marques_16, marques_17, marques_18, marques_19, marques_20, marques_21, marques_22, marques_23, marques_24, marques_25, marques)
+rm(Ciclovias_corrigir_trocos, nacoes_novo_25, marques_13, marques_14, marques_15, marques_16, marques_17, marques_18, marques_19, marques_20, marques_21, marques_22, marques_23, marques_24, marques_25, marques,
+   rego_18, rego_19, rego_20, rego_21, rego_22, rego_23, rego_24, rego_25, rego)
 ```
 
 
